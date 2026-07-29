@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
@@ -9,123 +9,117 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FAFAF9;
-    --card:#FFFFFF;
-    --ink:#17181A;
-    --ink-soft:#8A8D91;
-    --border:#EEEEEC;
-
-    --c-tayyorlov:#F3A79C;
-    --c-katta:#9CBDEC;
-    --c-orta:#F0CE84;
-    --c-kichik:#9BD9BC;
-
+    --bg:#FAFAF9; --card:#FFFFFF; --ink:#17181A; --ink-soft:#8A8D91; --border:#EEEEEC;
+    --c-tayyorlov:#F3A79C; --c-katta:#9CBDEC; --c-orta:#F0CE84; --c-kichik:#9BD9BC;
+    --accent:#3F7D5C; --accent-soft:#DFEEE4;
     --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.06);
+  }
+  html.dark{
+    --bg:#16181A; --card:#1F2224; --ink:#F3F4F4; --ink-soft:#8E9296; --border:#2C3033;
+    --c-tayyorlov:#7A3A34; --c-katta:#2E4C6B; --c-orta:#7A6428; --c-kichik:#2E6350;
+    --accent:#5FBF8E; --accent-soft:#22352C;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 12px 28px rgba(0,0,0,0.4);
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Manrope',sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    padding-bottom:36px;
-  }
+  body{background:var(--bg); color:var(--ink); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:36px; transition:background .2s ease, color .2s ease;}
   button{font-family:inherit; cursor:pointer;}
   a{text-decoration:none; color:inherit;}
+  input, textarea, select{font-family:inherit;}
 
-  /* ---------- Header ---------- */
-  .hero{
-    padding:40px 24px 8px;
-    max-width:520px;
-    margin:0 auto;
-  }
-  h1{
-    font-size:clamp(30px,8vw,36px);
-    font-weight:800;
-    line-height:1.22;
-    margin:0 0 10px;
-    letter-spacing:-0.02em;
-    color:var(--ink);
-  }
-  .hero p{
-    color:#5B5E63;
-    font-size:16.5px;
-    line-height:1.55;
-    margin:0;
-    font-weight:600;
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* ---- Theme toggle ---- */
+  .theme-toggle{
+    position:fixed; top:16px; right:16px; z-index:40;
+    width:38px; height:38px; border-radius:50%; background:var(--card);
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    font-size:17px; box-shadow:var(--shadow);
   }
 
-  /* ---------- Grid ---------- */
-  .grid{
-    max-width:520px; margin:24px auto 0; padding:0 24px;
-    display:grid; grid-template-columns:1fr 1fr; gap:12px;
-  }
-  .card{
-    border:none; border-radius:20px;
-    padding:22px 16px;
-    display:flex; flex-direction:column; align-items:flex-start; gap:26px;
-    min-height:138px;
-    color:var(--ink);
-    text-align:left;
-    position:relative;
-    overflow:hidden;
-    transition:transform .12s ease;
-  }
+  /* ---- Home ---- */
+  .hero{padding:36px 60px 8px 24px; max-width:520px; margin:0 auto;}
+  h1{font-size:clamp(24px,7vw,30px); font-weight:800; line-height:1.2; margin:0 0 8px; letter-spacing:-0.02em;}
+  .hero p{color:var(--ink-soft); font-size:15px; line-height:1.5; margin:0; font-weight:500;}
+
+  .grid{max-width:520px; margin:22px auto 0; padding:0 24px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .card{border:none; border-radius:20px; padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; gap:24px; min-height:120px; color:var(--ink); text-align:left; position:relative; transition:transform .12s ease;}
   .card:active{transform:scale(0.96);}
-
   .card[data-group="tayyorlov"]{background:var(--c-tayyorlov);}
   .card[data-group="katta"]{background:var(--c-katta);}
   .card[data-group="orta"]{background:var(--c-orta);}
   .card[data-group="kichik"]{background:var(--c-kichik);}
+  .card-emoji{font-size:26px;}
+  .card-label{font-size:16px; font-weight:800; line-height:1.25;}
+  .card-arrow{position:absolute; top:16px; right:16px; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,0.14); display:flex; align-items:center; justify-content:center;}
+  .card-arrow svg{width:13px; height:13px;}
 
-  .card-emoji{font-size:28px; line-height:1;}
-  .card-label{
-    font-size:18px; font-weight:800; line-height:1.25;
-    color:var(--ink);
-  }
-  .card-arrow{
-    position:absolute; top:18px; right:16px;
-    width:28px; height:28px; border-radius:50%;
-    background:rgba(23,24,26,0.14);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .card-arrow svg{width:14px; height:14px;}
+  footer{max-width:520px; margin:26px auto 0; padding:0 24px; text-align:center; font-size:11px; color:var(--ink-soft); font-weight:500;}
 
-  /* ---------- Footnote ---------- */
-  .footnote{
-    max-width:520px; margin:22px auto 0; padding:0 24px;
-  }
-  .footnote-inner{
-    background:var(--card); border:1px solid var(--border); border-radius:16px;
-    padding:16px 18px;
-    display:flex; align-items:center; gap:12px;
-  }
-  .footnote-icon{
-    width:32px; height:32px; border-radius:50%; flex-shrink:0;
-    background:var(--bg); display:flex; align-items:center; justify-content:center;
-    font-size:15px;
-  }
-  .footnote-text{
-    font-size:13.5px; color:#6B6E73; line-height:1.5; font-weight:600;
+  /* ---- Topbar (shared) ---- */
+  .topbar{max-width:520px; margin:0 auto; padding:18px 60px 0 24px; display:flex; align-items:center; gap:12px;}
+  .back-btn{background:var(--card); border:1px solid var(--border); border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .back-btn svg path{stroke:var(--ink);}
+  .topbar-title{font-size:19px; font-weight:800;}
+  .topbar-sub{font-size:12px; color:var(--ink-soft); font-weight:600;}
+
+  .section{max-width:520px; margin:0 auto; padding:18px 24px 0;}
+  .channel-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--ink); color:var(--bg); border:none; padding:14px 18px; border-radius:13px;
+    font-weight:700; font-size:14.5px;
   }
 
-  footer{
-    max-width:520px; margin:28px auto 0; padding:0 24px;
-    text-align:center; font-size:11.5px; color:var(--ink-soft); font-weight:500;
+  /* ---- Category list (vertical, group screen) ---- */
+  .cat-list{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
+  .cat-row{
+    background:var(--card); border:1px solid var(--border); border-radius:15px;
+    padding:16px 16px; display:flex; align-items:center; gap:14px; text-align:left;
   }
+  .cat-icon{width:44px; height:44px; border-radius:12px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;}
+  .cat-body{flex:1; min-width:0;}
+  .cat-name{font-weight:800; font-size:15px; margin-bottom:2px;}
+  .cat-count{font-size:12px; color:var(--ink-soft); font-weight:600;}
+  .cat-arrow{width:20px; height:20px; flex-shrink:0; opacity:.4;}
 
-  /* ---------- Toast (tap feedback) ---------- */
-  .toast{
-    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
-    background:var(--ink); color:#fff; font-size:13.5px; font-weight:600;
-    padding:12px 20px; border-radius:999px;
-    opacity:0; pointer-events:none;
-    transition:opacity .18s ease, transform .18s ease;
-    box-shadow:var(--shadow);
-    white-space:nowrap;
+  /* ---- Category detail (item list) ---- */
+  .search-row{display:flex; gap:8px; margin:18px 0 12px;}
+  .search-input{flex:1; padding:11px 14px; border-radius:11px; border:1px solid var(--border); background:var(--card); color:var(--ink); font-size:14px;}
+
+  .item{background:var(--card); border:1px solid var(--border); border-radius:15px; padding:14px; margin-bottom:10px; display:flex; gap:12px;}
+  .item-thumb{width:64px; height:64px; border-radius:11px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; overflow:hidden;}
+  .item-thumb img{width:100%; height:100%; object-fit:cover;}
+  .item-body{flex:1; min-width:0;}
+  .item-name{font-weight:800; font-size:14.5px; margin-bottom:4px;}
+  .item-price{font-weight:800; font-size:13px; color:var(--accent); margin-bottom:4px;}
+  .item-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.4; margin-bottom:8px;}
+  .item-actions{display:flex; gap:8px;}
+  .item-view-btn{flex:1; text-align:center; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700; color:var(--ink);}
+
+  .empty-state{text-align:center; padding:24px 16px; color:var(--ink-soft); font-size:13px;}
+
+  .order-btn{
+    width:100%; margin-top:6px; background:var(--card); border:2px dashed var(--border); color:var(--ink);
+    padding:14px 18px; border-radius:13px; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;
   }
+  .order-btn:active{border-color:var(--accent);}
+
+  /* ---- Order modal ---- */
+  .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:flex-end; z-index:50;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--card); width:100%; border-radius:22px 22px 0 0; padding:22px 22px 28px; max-height:85vh; overflow-y:auto;}
+  .modal h2{font-size:18px; font-weight:800; margin:0 0 4px;}
+  .modal .sub{font-size:12.5px; color:var(--ink-soft); margin:0 0 18px;}
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;}
+  .field input, .field textarea{width:100%; padding:12px 14px; border-radius:11px; border:1px solid var(--border); background:var(--bg); color:var(--ink); font-size:14px;}
+  .field textarea{min-height:80px; resize:vertical;}
+  .modal-actions{display:flex; gap:10px; margin-top:6px;}
+  .btn-cancel{flex:1; background:var(--bg); border:1px solid var(--border); color:var(--ink); border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
+  .btn-submit{flex:2; background:var(--accent); color:#0B120E; border:none; border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
+
+  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:700; padding:12px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; box-shadow:var(--shadow); z-index:60; white-space:nowrap;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
@@ -133,47 +127,117 @@
 </head>
 <body>
 
-<div class="hero">
-  <h1>O'z guruhingizni tanlang</h1>
-  <p>Bosing — kanalga to'g'ridan-to'g'ri o'tasiz.</p>
-</div>
+<button class="theme-toggle" id="themeToggle">🌙</button>
 
-<div class="grid">
-  <a class="card" data-group="tayyorlov" href="https://t.me/Tayyorlov_guruh_DMTT" target="_blank" rel="noopener">
-    <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="card-emoji">🎒</span>
-    <span class="card-label">Tayyorlov<br>guruhi</span>
-  </a>
+<!-- HOME -->
+<section class="screen active" id="homeScreen">
+  <div class="hero">
+    <h1>O'z guruhingizni tanlang</h1>
+    <p>Kanal, ko'rgazmalar va hujjatlar — barchasi bir joyda.</p>
+  </div>
+  <div class="grid">
+    <button class="card" data-group="tayyorlov">
+      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="card-emoji">🎒</span>
+      <span class="card-label">Tayyorlov<br>guruhi</span>
+    </button>
+    <button class="card" data-group="katta">
+      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="card-emoji">🧩</span>
+      <span class="card-label">Katta<br>guruh</span>
+    </button>
+    <button class="card" data-group="orta">
+      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="card-emoji">🖍️</span>
+      <span class="card-label">O'rta<br>guruh</span>
+    </button>
+    <button class="card" data-group="kichik">
+      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="card-emoji">🧸</span>
+      <span class="card-label">Kichik<br>guruh</span>
+    </button>
+  </div>
+  <footer>Bog'cha hujjatlari · Ichki portal</footer>
+</section>
 
-  <a class="card" data-group="katta" href="https://t.me/Katta_guruh_DMTT" target="_blank" rel="noopener">
-    <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="card-emoji">🧩</span>
-    <span class="card-label">Katta<br>guruh</span>
-  </a>
+<!-- GROUP SCREEN: category list -->
+<section class="screen" id="groupScreen">
+  <div class="topbar">
+    <button class="back-btn" id="backToHome">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div>
+      <div class="topbar-title" id="groupTitle">Guruh</div>
+      <div class="topbar-sub">Bo'limni tanlang</div>
+    </div>
+  </div>
 
-  <a class="card" data-group="orta" href="https://t.me/Orta_guruh_DMTT" target="_blank" rel="noopener">
-    <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="card-emoji">🖍️</span>
-    <span class="card-label">O'rta<br>guruh</span>
-  </a>
+  <div class="section">
+    <a class="channel-btn" id="channelLink" href="#" target="_blank" rel="noopener">Kanalga o'tish →</a>
+    <div class="cat-list" id="catList"></div>
+  </div>
 
-  <a class="card" data-group="kichik" href="https://t.me/Kichik_guruh_DMTT" target="_blank" rel="noopener">
-    <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="card-emoji">🧸</span>
-    <span class="card-label">Kichik<br>guruh</span>
-  </a>
-</div>
+  <footer>Bog'cha hujjatlari · Ichki portal</footer>
+</section>
 
-<div class="footnote">
-  <div class="footnote-inner">
-    <div class="footnote-icon">📄</div>
-    <div class="footnote-text">Hujjatlar bo'limi tez orada shu yerga qo'shiladi.</div>
+<!-- CATEGORY SCREEN: item list -->
+<section class="screen" id="categoryScreen">
+  <div class="topbar">
+    <button class="back-btn" id="backToGroup">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div>
+      <div class="topbar-title" id="categoryTitle">Bo'lim</div>
+      <div class="topbar-sub" id="categoryGroupLabel">Guruh</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="search-row">
+      <input class="search-input" id="searchInput" placeholder="Qidirish...">
+    </div>
+    <div id="itemsList"></div>
+    <button class="order-btn" id="orderBtn">🛒 Kerakli narsa topilmadi — buyurtma berish</button>
+  </div>
+
+  <footer>Bog'cha hujjatlari · Ichki portal</footer>
+</section>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <h2>Buyurtma berish</h2>
+    <p class="sub" id="orderContextLabel">Guruh: — · Bo'lim: —</p>
+
+    <div class="field">
+      <label>Nima kerak</label>
+      <textarea id="orderText" placeholder="Masalan: O'zbekiston xaritasi, A2 formatda, bosma"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Qachongacha kerak (ixtiyoriy)</label>
+      <input id="orderDate" placeholder="Masalan: shu hafta ichida">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" id="orderCancel">Bekor qilish</button>
+      <button class="btn-submit" id="orderSubmit">Yuborish</button>
+    </div>
   </div>
 </div>
 
-<footer>Bog'cha hujjatlari · Ichki portal</footer>
+<div class="toast" id="toast">Buyurtma yuborildi</div>
 
-<div class="toast" id="toast">Kanalga o'tilmoqda...</div>
+<script id="catalogData" type="application/json">
+[
+  {"id":1,"name":"Milliy burchak ko'rgazmasi","category":"korgazma","groups":["tayyorlov"],"desc":"To'liq tayyor devoriy ko'rgazma, milliy ramzlar bilan.","price":"85 000 so'm","image":"images/milliy-burchak.jpg","telegram_link":"https://t.me/Tayyorlov_guruh_DMTT/10"},
+  {"id":2,"name":"O'zbekiston xaritasi (A2)","category":"korgazma","groups":["tayyorlov","katta","orta"],"desc":"Devorga osiladigan katta xarita.","price":"45 000 so'm","image":"","telegram_link":""},
+  {"id":3,"name":"Yillik mavzuli reja shabloni","category":"hujjat","groups":["tayyorlov","katta","orta","kichik"],"desc":"To'ldirish uchun tayyor Word shablon.","price":"Bepul","image":"","telegram_link":""},
+  {"id":4,"name":"Sentyabr oyi — 1-hafta ishlanma","category":"ishlanma","groups":["tayyorlov"],"desc":"To'liq mashg'ulot ishlanmasi, 5 markaz bo'yicha.","price":"25 000 so'm","image":"","telegram_link":""},
+  {"id":5,"name":"\"Bayram konserti\" ssenariysi","category":"ssenariy","groups":["katta","orta"],"desc":"Mustaqillik bayrami uchun tayyor ssenariy.","price":"35 000 so'm","image":"","telegram_link":""},
+  {"id":6,"name":"Kuzgi barglar gerbariyi","category":"korgazma","groups":["kichik","orta"],"desc":"Tayyor, nomlangan gerbariy to'plami.","price":"30 000 so'm","image":"","telegram_link":""}
+]
+</script>
 
 <script>
 (function(){
@@ -183,12 +247,166 @@
     tg.expand();
   }
 
-  const toast = document.getElementById('toast');
+  // ---- Theme toggle ----
+  const themeToggle = document.getElementById('themeToggle');
+  let isDark = false;
+  themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    document.documentElement.classList.toggle('dark', isDark);
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  const CATALOG = JSON.parse(document.getElementById('catalogData').textContent);
+  const GROUP_INFO = {
+    tayyorlov: { name: "Tayyorlov guruhi", link: "https://t.me/Tayyorlov_guruh_DMTT" },
+    katta:     { name: "Katta guruh",       link: "https://t.me/Katta_guruh_DMTT" },
+    orta:      { name: "O'rta guruh",       link: "https://t.me/Orta_guruh_DMTT" },
+    kichik:    { name: "Kichik guruh",      link: "https://t.me/Kichik_guruh_DMTT" },
+  };
+  const CATEGORIES = [
+    { id: 'korgazma', name: "Ko'rgazmalar", icon: '📸' },
+    { id: 'hujjat', name: "Hujjatlar", icon: '📄' },
+    { id: 'ishlanma', name: "Mashg'ulot ishlanmalari", icon: '📝' },
+    { id: 'ssenariy', name: "Ssenariylar", icon: '🎭' },
+  ];
+
+  let currentGroup = null;
+  let currentCategory = null;
+  let searchQuery = '';
+
+  const homeScreen = document.getElementById('homeScreen');
+  const groupScreen = document.getElementById('groupScreen');
+  const categoryScreen = document.getElementById('categoryScreen');
+
+  function showScreen(el){
+    [homeScreen, groupScreen, categoryScreen].forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    window.scrollTo(0,0);
+  }
+
   document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 1400);
+    card.addEventListener('click', () => openGroup(card.dataset.group));
+  });
+  document.getElementById('backToHome').addEventListener('click', () => showScreen(homeScreen));
+  document.getElementById('backToGroup').addEventListener('click', () => showScreen(groupScreen));
+
+  function openGroup(group){
+    currentGroup = group;
+    const info = GROUP_INFO[group];
+    document.getElementById('groupTitle').textContent = info.name;
+    document.getElementById('channelLink').href = info.link;
+    renderCategories();
+    showScreen(groupScreen);
+  }
+
+  function renderCategories(){
+    const wrap = document.getElementById('catList');
+    wrap.innerHTML = '';
+    CATEGORIES.forEach(cat => {
+      const count = CATALOG.filter(it => it.groups.includes(currentGroup) && it.category === cat.id).length;
+      const row = document.createElement('button');
+      row.className = 'cat-row';
+      row.innerHTML = `
+        <div class="cat-icon">${cat.icon}</div>
+        <div class="cat-body">
+          <div class="cat-name">${cat.name}</div>
+          <div class="cat-count">${count} ta material</div>
+        </div>
+        <svg class="cat-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      `;
+      row.addEventListener('click', () => openCategory(cat.id));
+      wrap.appendChild(row);
     });
+  }
+
+  function openCategory(catId){
+    currentCategory = catId;
+    searchQuery = '';
+    document.getElementById('searchInput').value = '';
+    const cat = CATEGORIES.find(c => c.id === catId);
+    document.getElementById('categoryTitle').textContent = cat.name;
+    document.getElementById('categoryGroupLabel').textContent = GROUP_INFO[currentGroup].name;
+    renderItems();
+    showScreen(categoryScreen);
+  }
+
+  function renderItems(){
+    const list = document.getElementById('itemsList');
+    list.innerHTML = '';
+    let items = CATALOG.filter(it => it.groups.includes(currentGroup) && it.category === currentCategory);
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      items = items.filter(it => it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q));
+    }
+
+    if (items.length === 0) {
+      list.innerHTML = '<div class="empty-state">Bu bo\'limda hali material yo\'q. Pastdagi tugma orqali buyurtma bering.</div>';
+      return;
+    }
+
+    items.forEach(it => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      const thumbContent = it.image ? `<img src="${it.image}" alt="">` : '🖼️';
+      const viewBtn = it.telegram_link
+        ? `<a class="item-view-btn" href="${it.telegram_link}" target="_blank" rel="noopener">To'liq ma'lumot →</a>`
+        : `<span class="item-view-btn" style="opacity:.5;">Havola qo'shilmagan</span>`;
+      div.innerHTML = `
+        <div class="item-thumb">${thumbContent}</div>
+        <div class="item-body">
+          <div class="item-name">${it.name}</div>
+          <div class="item-price">${it.price}</div>
+          <div class="item-desc">${it.desc}</div>
+          <div class="item-actions">${viewBtn}</div>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    renderItems();
+  });
+
+  // ---- Order modal ----
+  const orderModal = document.getElementById('orderModal');
+  const toast = document.getElementById('toast');
+
+  document.getElementById('orderBtn').addEventListener('click', () => {
+    const cat = CATEGORIES.find(c => c.id === currentCategory);
+    document.getElementById('orderContextLabel').textContent =
+      'Guruh: ' + GROUP_INFO[currentGroup].name + ' · Bo\'lim: ' + cat.name;
+    document.getElementById('orderText').value = '';
+    document.getElementById('orderDate').value = '';
+    orderModal.classList.add('open');
+  });
+  document.getElementById('orderCancel').addEventListener('click', () => orderModal.classList.remove('open'));
+
+  document.getElementById('orderSubmit').addEventListener('click', () => {
+    const text = document.getElementById('orderText').value.trim();
+    if (!text) {
+      document.getElementById('orderText').focus();
+      return;
+    }
+    const payload = {
+      type: 'buyurtma',
+      group: currentGroup,
+      group_name: GROUP_INFO[currentGroup].name,
+      category: currentCategory,
+      text: text,
+      deadline: document.getElementById('orderDate').value.trim(),
+    };
+
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
+      window.Telegram.WebApp.sendData(JSON.stringify(payload));
+    } else {
+      console.log('ORDER (standalone test):', payload);
+    }
+
+    orderModal.classList.remove('open');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
   });
 })();
 </script>
