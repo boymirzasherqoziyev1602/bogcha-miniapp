@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
@@ -22,7 +22,7 @@
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{background:var(--bg); color:var(--ink); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:36px; transition:background .2s ease, color .2s ease;}
+  body{background:var(--bg); color:var(--ink); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:96px; transition:background .2s ease, color .2s ease;}
   button{font-family:inherit; cursor:pointer;}
   a{text-decoration:none; color:inherit;}
   input, textarea, select{font-family:inherit;}
@@ -30,7 +30,6 @@
   .screen{display:none;}
   .screen.active{display:block;}
 
-  /* ---- Theme toggle ---- */
   .theme-toggle{
     position:fixed; top:16px; right:16px; z-index:40;
     width:38px; height:38px; border-radius:50%; background:var(--card);
@@ -38,13 +37,12 @@
     font-size:17px; box-shadow:var(--shadow);
   }
 
-  /* ---- Home ---- */
   .hero{padding:36px 60px 8px 24px; max-width:520px; margin:0 auto;}
   h1{font-size:clamp(24px,7vw,30px); font-weight:800; line-height:1.2; margin:0 0 8px; letter-spacing:-0.02em;}
   .hero p{color:var(--ink-soft); font-size:15px; line-height:1.5; margin:0; font-weight:500;}
 
   .grid{max-width:520px; margin:22px auto 0; padding:0 24px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  .card{border:none; border-radius:20px; padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; gap:24px; min-height:120px; color:var(--ink); text-align:left; position:relative; transition:transform .12s ease;}
+  .card{border:none; border-radius:20px; padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; gap:24px; min-height:120px; color:#17181A; text-align:left; position:relative; transition:transform .12s ease;}
   .card:active{transform:scale(0.96);}
   .card[data-group="tayyorlov"]{background:var(--c-tayyorlov);}
   .card[data-group="katta"]{background:var(--c-katta);}
@@ -57,7 +55,6 @@
 
   footer{max-width:520px; margin:26px auto 0; padding:0 24px; text-align:center; font-size:11px; color:var(--ink-soft); font-weight:500;}
 
-  /* ---- Topbar (shared) ---- */
   .topbar{max-width:520px; margin:0 auto; padding:18px 60px 0 24px; display:flex; align-items:center; gap:12px;}
   .back-btn{background:var(--card); border:1px solid var(--border); border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .back-btn svg path{stroke:var(--ink);}
@@ -71,7 +68,6 @@
     font-weight:700; font-size:14.5px;
   }
 
-  /* ---- Category list (vertical, group screen) ---- */
   .cat-list{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
   .cat-row{
     background:var(--card); border:1px solid var(--border); border-radius:15px;
@@ -83,19 +79,20 @@
   .cat-count{font-size:12px; color:var(--ink-soft); font-weight:600;}
   .cat-arrow{width:20px; height:20px; flex-shrink:0; opacity:.4;}
 
-  /* ---- Category detail (item list) ---- */
   .search-row{display:flex; gap:8px; margin:18px 0 12px;}
   .search-input{flex:1; padding:11px 14px; border-radius:11px; border:1px solid var(--border); background:var(--card); color:var(--ink); font-size:14px;}
 
-  .item{background:var(--card); border:1px solid var(--border); border-radius:15px; padding:14px; margin-bottom:10px; display:flex; gap:12px;}
+  .item{background:var(--card); border:1px solid var(--border); border-radius:15px; padding:14px; margin-bottom:10px; display:flex; flex-direction:column; gap:10px;}
+  .item-top{display:flex; gap:12px;}
   .item-thumb{width:64px; height:64px; border-radius:11px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; overflow:hidden;}
   .item-thumb img{width:100%; height:100%; object-fit:cover;}
   .item-body{flex:1; min-width:0;}
   .item-name{font-weight:800; font-size:14.5px; margin-bottom:4px;}
   .item-price{font-weight:800; font-size:13px; color:var(--accent); margin-bottom:4px;}
-  .item-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.4; margin-bottom:8px;}
+  .item-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.4;}
   .item-actions{display:flex; gap:8px;}
-  .item-view-btn{flex:1; text-align:center; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:8px 10px; font-size:12px; font-weight:700; color:var(--ink);}
+  .item-view-btn{flex:1; text-align:center; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:9px 10px; font-size:12px; font-weight:700; color:var(--ink);}
+  .item-order-btn{flex:1; text-align:center; background:var(--accent); border:none; border-radius:9px; padding:9px 10px; font-size:12px; font-weight:800; color:#0B120E;}
 
   .empty-state{text-align:center; padding:24px 16px; color:var(--ink-soft); font-size:13px;}
 
@@ -105,7 +102,6 @@
   }
   .order-btn:active{border-color:var(--accent);}
 
-  /* ---- Order modal ---- */
   .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:flex-end; z-index:50;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--card); width:100%; border-radius:22px 22px 0 0; padding:22px 22px 28px; max-height:85vh; overflow-y:auto;}
@@ -119,7 +115,7 @@
   .btn-cancel{flex:1; background:var(--bg); border:1px solid var(--border); color:var(--ink); border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
   .btn-submit{flex:2; background:var(--accent); color:#0B120E; border:none; border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
 
-  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:700; padding:12px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; box-shadow:var(--shadow); z-index:60; white-space:nowrap;}
+  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:700; padding:12px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; box-shadow:var(--shadow); z-index:60; white-space:nowrap; max-width:88vw; text-align:center; white-space:normal;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
@@ -160,7 +156,7 @@
   <footer>Bog'cha hujjatlari · Ichki portal</footer>
 </section>
 
-<!-- GROUP SCREEN: category list -->
+<!-- GROUP SCREEN -->
 <section class="screen" id="groupScreen">
   <div class="topbar">
     <button class="back-btn" id="backToHome">
@@ -180,7 +176,7 @@
   <footer>Bog'cha hujjatlari · Ichki portal</footer>
 </section>
 
-<!-- CATEGORY SCREEN: item list -->
+<!-- CATEGORY SCREEN -->
 <section class="screen" id="categoryScreen">
   <div class="topbar">
     <button class="back-btn" id="backToGroup">
@@ -197,7 +193,7 @@
       <input class="search-input" id="searchInput" placeholder="Qidirish...">
     </div>
     <div id="itemsList"></div>
-    <button class="order-btn" id="orderBtn">🛒 Kerakli narsa topilmadi — buyurtma berish</button>
+    <button class="order-btn" id="orderBtn">🛒 Boshqa narsa kerak — buyurtma berish</button>
   </div>
 
   <footer>Bog'cha hujjatlari · Ichki portal</footer>
@@ -206,10 +202,10 @@
 <!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
-    <h2>Buyurtma berish</h2>
+    <h2 id="orderModalTitle">Buyurtma berish</h2>
     <p class="sub" id="orderContextLabel">Guruh: — · Bo'lim: —</p>
 
-    <div class="field">
+    <div class="field" id="orderTextField">
       <label>Nima kerak</label>
       <textarea id="orderText" placeholder="Masalan: O'zbekiston xaritasi, A2 formatda, bosma"></textarea>
     </div>
@@ -217,6 +213,11 @@
     <div class="field">
       <label>Qachongacha kerak (ixtiyoriy)</label>
       <input id="orderDate" placeholder="Masalan: shu hafta ichida">
+    </div>
+
+    <div class="field">
+      <label>Telefon raqamingiz</label>
+      <input id="orderPhone" placeholder="+998 90 123 45 67" inputmode="tel">
     </div>
 
     <div class="modal-actions">
@@ -230,31 +231,59 @@
 
 <script id="catalogData" type="application/json">
 [
-  {"id":1,"name":"Milliy burchak ko'rgazmasi","category":"korgazma","groups":["tayyorlov"],"desc":"To'liq tayyor devoriy ko'rgazma, milliy ramzlar bilan.","price":"85 000 so'm","image":"Screenshot_20260729_034146_org_telegram_messenger_LaunchActivity.jpg","telegram_link":"https://t.me/Tayyorlov_guruh_DMTT/10"},
-  {"id":2,"name":"O'zbekiston xaritasi (A2)","category":"korgazma","groups":["tayyorlov","katta","orta"],"desc":"Devorga osiladigan katta xarita.","price":"45 000 so'm","image":"","telegram_link":""},
-  {"id":3,"name":"Yillik mavzuli reja shabloni","category":"hujjat","groups":["tayyorlov","katta","orta","kichik"],"desc":"To'ldirish uchun tayyor Word shablon.","price":"Bepul","image":"","telegram_link":""},
-  {"id":4,"name":"Sentyabr oyi — 1-hafta ishlanma","category":"ishlanma","groups":["tayyorlov"],"desc":"To'liq mashg'ulot ishlanmasi, 5 markaz bo'yicha.","price":"25 000 so'm","image":"","telegram_link":""},
-  {"id":5,"name":"\"Bayram konserti\" ssenariysi","category":"ssenariy","groups":["katta","orta"],"desc":"Mustaqillik bayrami uchun tayyor ssenariy.","price":"35 000 so'm","image":"","telegram_link":""},
-  {"id":6,"name":"Kuzgi barglar gerbariyi","category":"korgazma","groups":["kichik","orta"],"desc":"Tayyor, nomlangan gerbariy to'plami.","price":"30 000 so'm","image":"","telegram_link":""}
+  {"id":1,"name":"Milliy burchak ko'rgazmasi","category":"korgazma","groups":["tayyorlov"],"desc":"To'liq tayyor devoriy ko'rgazma, milliy ramzlar bilan.","price":85000,"image":"","telegram_link":"https://t.me/Tayyorlov_guruh_DMTT/10"},
+  {"id":2,"name":"O'zbekiston xaritasi (A2)","category":"korgazma","groups":["tayyorlov","katta","orta"],"desc":"Devorga osiladigan katta xarita.","price":45000,"image":"","telegram_link":""},
+  {"id":3,"name":"Yillik mavzuli reja shabloni","category":"hujjat","groups":["tayyorlov","katta","orta","kichik"],"desc":"To'ldirish uchun tayyor Word shablon.","price":0,"image":"","telegram_link":""},
+  {"id":4,"name":"Sentyabr oyi — 1-hafta ishlanma","category":"ishlanma","groups":["tayyorlov"],"desc":"To'liq mashg'ulot ishlanmasi, 5 markaz bo'yicha.","price":25000,"image":"","telegram_link":""},
+  {"id":5,"name":"\"Bayram konserti\" ssenariysi","category":"ssenariy","groups":["katta","orta"],"desc":"Mustaqillik bayrami uchun tayyor ssenariy.","price":35000,"image":"","telegram_link":""},
+  {"id":6,"name":"Kuzgi barglar gerbariyi","category":"korgazma","groups":["kichik","orta"],"desc":"Tayyor, nomlangan gerbariy to'plami.","price":30000,"image":"","telegram_link":""}
 ]
 </script>
 
 <script>
 (function(){
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-  }
+  const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+  if (tg) { tg.ready(); tg.expand(); }
 
-  // ---- Theme toggle ----
+  // ============================================================
+  // MUHIM ESLATMA (kod ichida qoldiryapman, keyin o'zingiz ham ko'rasiz):
+  //
+  // 1) sendData() FAQAT bot "Keyboard Button" (pastki tugmalar qatori)
+  //    orqali Mini App ochganda ishlaydi. Agar bot Menu Button yoki
+  //    inline "web_app" tugmasi orqali ochsa — sendData() jim ravishda
+  //    hech narsa qilmaydi. BotFather'dan botingiz qanday sozlanganini
+  //    tekshiring: /mybots -> botingiz -> Bot Settings -> Menu Button.
+  //
+  // 2) Bot tomonida (server/Python/Node kodida) web_app_data update'ini
+  //    qabul qilib, uni ADMIN GURUHGA forward qiladigan kod bo'lishi
+  //    SHART — aks holda xabar botga tushadi-yu, siz uni ko'rmaysiz.
+  //
+  // 3) To'lov: hozircha bu yerda faqat "buyurtma so'rovi" yuboriladi,
+  //    haqiqiy Payme/Click to'lovi yo'q. BACKEND_ORDER_URL to'ldirilsa,
+  //    bu yerdan sizning serveringizga so'rov ketadi (tavsiya etiladi).
+  // ============================================================
+  const BACKEND_ORDER_URL = "https://bogchabujjatlari.boymirzasherqoziyev1602.workers.dev";
+
+  // ---- Theme: avval Telegramning o'z mavzusidan olamiz ----
   const themeToggle = document.getElementById('themeToggle');
-  let isDark = false;
-  themeToggle.addEventListener('click', () => {
-    isDark = !isDark;
+  let isDark = tg ? tg.colorScheme === 'dark' : false;
+  applyTheme();
+  function applyTheme(){
     document.documentElement.classList.toggle('dark', isDark);
     themeToggle.textContent = isDark ? '☀️' : '🌙';
+  }
+  themeToggle.addEventListener('click', () => {
+    isDark = !isDark;
+    applyTheme();
+    haptic('light');
   });
+
+  function haptic(style){
+    if (tg && tg.HapticFeedback) {
+      if (style === 'light' || style === 'medium' || style === 'rigid') tg.HapticFeedback.impactOccurred(style);
+      else if (style === 'success' || style === 'error' || style === 'warning') tg.HapticFeedback.notificationOccurred(style);
+    }
+  }
 
   const CATALOG = JSON.parse(document.getElementById('catalogData').textContent);
   const GROUP_INFO = {
@@ -273,22 +302,30 @@
   let currentGroup = null;
   let currentCategory = null;
   let searchQuery = '';
+  let orderingItem = null; // agar aniq mahsulot buyurtma qilinsa, shu yerda turadi
 
   const homeScreen = document.getElementById('homeScreen');
   const groupScreen = document.getElementById('groupScreen');
   const categoryScreen = document.getElementById('categoryScreen');
+  const SCREENS = [homeScreen, groupScreen, categoryScreen];
 
-  function showScreen(el){
-    [homeScreen, groupScreen, categoryScreen].forEach(s => s.classList.remove('active'));
+  function showScreen(el, backAction){
+    SCREENS.forEach(s => s.classList.remove('active'));
     el.classList.add('active');
     window.scrollTo(0,0);
+    if (tg && tg.BackButton) {
+      if (backAction) { tg.BackButton.show(); tg.BackButton.offClick(); tg.BackButton.onClick(backAction); }
+      else { tg.BackButton.hide(); }
+    }
   }
 
+  function fmtPrice(p){ return p === 0 ? "Bepul" : p.toLocaleString('ru-RU') + " so'm"; }
+
   document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => openGroup(card.dataset.group));
+    card.addEventListener('click', () => { haptic('light'); openGroup(card.dataset.group); });
   });
   document.getElementById('backToHome').addEventListener('click', () => showScreen(homeScreen));
-  document.getElementById('backToGroup').addEventListener('click', () => showScreen(groupScreen));
+  document.getElementById('backToGroup').addEventListener('click', () => showScreen(groupScreen, () => document.getElementById('backToHome').click()));
 
   function openGroup(group){
     currentGroup = group;
@@ -296,7 +333,7 @@
     document.getElementById('groupTitle').textContent = info.name;
     document.getElementById('channelLink').href = info.link;
     renderCategories();
-    showScreen(groupScreen);
+    showScreen(groupScreen, () => document.getElementById('backToHome').click());
   }
 
   function renderCategories(){
@@ -314,7 +351,7 @@
         </div>
         <svg class="cat-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       `;
-      row.addEventListener('click', () => openCategory(cat.id));
+      row.addEventListener('click', () => { haptic('light'); openCategory(cat.id); });
       wrap.appendChild(row);
     });
   }
@@ -327,7 +364,7 @@
     document.getElementById('categoryTitle').textContent = cat.name;
     document.getElementById('categoryGroupLabel').textContent = GROUP_INFO[currentGroup].name;
     renderItems();
-    showScreen(categoryScreen);
+    showScreen(categoryScreen, () => document.getElementById('backToGroup').click());
   }
 
   function renderItems(){
@@ -347,20 +384,42 @@
     items.forEach(it => {
       const div = document.createElement('div');
       div.className = 'item';
-      const thumbContent = it.image ? `<img src="${it.image}" alt="">` : '🖼️';
       const viewBtn = it.telegram_link
-        ? `<a class="item-view-btn" href="${it.telegram_link}" target="_blank" rel="noopener">To'liq ma'lumot →</a>`
-        : `<span class="item-view-btn" style="opacity:.5;">Havola qo'shilmagan</span>`;
+        ? `<a class="item-view-btn" href="${it.telegram_link}" target="_blank" rel="noopener">To'liq ko'rish →</a>`
+        : `<span class="item-view-btn" style="opacity:.5;">Havola yo'q</span>`;
       div.innerHTML = `
-        <div class="item-thumb">${thumbContent}</div>
-        <div class="item-body">
-          <div class="item-name">${it.name}</div>
-          <div class="item-price">${it.price}</div>
-          <div class="item-desc">${it.desc}</div>
-          <div class="item-actions">${viewBtn}</div>
+        <div class="item-top">
+          <div class="item-thumb" data-thumb-for="${it.id}">🖼️</div>
+          <div class="item-body">
+            <div class="item-name">${it.name}</div>
+            <div class="item-price">${fmtPrice(it.price)}</div>
+            <div class="item-desc">${it.desc}</div>
+          </div>
+        </div>
+        <div class="item-actions">
+          ${viewBtn}
+          <button class="item-order-btn" data-order-id="${it.id}">🛒 Buyurtma qilish</button>
         </div>
       `;
       list.appendChild(div);
+
+      // Rasm bo'lsa yuklashga urinamiz, bo'lmasa yoki xato bo'lsa emoji qoladi
+      if (it.image) {
+        const thumb = div.querySelector(`[data-thumb-for="${it.id}"]`);
+        const img = new Image();
+        img.onload = () => { thumb.innerHTML = ''; thumb.appendChild(img); };
+        img.onerror = () => { /* rasm topilmadi — emoji joyida qoladi */ };
+        img.src = it.image;
+        img.alt = '';
+      }
+    });
+
+    list.querySelectorAll('[data-order-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        haptic('light');
+        const item = CATALOG.find(x => x.id == btn.dataset.orderId);
+        openOrderModal(item);
+      });
     });
   }
 
@@ -373,41 +432,102 @@
   const orderModal = document.getElementById('orderModal');
   const toast = document.getElementById('toast');
 
-  document.getElementById('orderBtn').addEventListener('click', () => {
+  function openOrderModal(item){
+    orderingItem = item || null;
     const cat = CATEGORIES.find(c => c.id === currentCategory);
-    document.getElementById('orderContextLabel').textContent =
-      'Guruh: ' + GROUP_INFO[currentGroup].name + ' · Bo\'lim: ' + cat.name;
+    const textField = document.getElementById('orderTextField');
+
+    if (orderingItem) {
+      document.getElementById('orderModalTitle').textContent = 'Buyurtmani tasdiqlang';
+      document.getElementById('orderContextLabel').textContent =
+        orderingItem.name + ' · ' + fmtPrice(orderingItem.price);
+      textField.style.display = 'none';
+    } else {
+      document.getElementById('orderModalTitle').textContent = 'Buyurtma berish';
+      document.getElementById('orderContextLabel').textContent =
+        'Guruh: ' + GROUP_INFO[currentGroup].name + ' · Bo\'lim: ' + cat.name;
+      textField.style.display = '';
+    }
+
     document.getElementById('orderText').value = '';
     document.getElementById('orderDate').value = '';
     orderModal.classList.add('open');
-  });
-  document.getElementById('orderCancel').addEventListener('click', () => orderModal.classList.remove('open'));
+  }
+
+  document.getElementById('orderBtn').addEventListener('click', () => { haptic('light'); openOrderModal(null); });
+  document.getElementById('orderCancel').addEventListener('click', () => { orderModal.classList.remove('open'); orderingItem = null; });
 
   document.getElementById('orderSubmit').addEventListener('click', () => {
-    const text = document.getElementById('orderText').value.trim();
-    if (!text) {
+    const freeText = document.getElementById('orderText').value.trim();
+    const phone = document.getElementById('orderPhone').value.trim();
+
+    if (!orderingItem && !freeText) {
       document.getElementById('orderText').focus();
+      haptic('error');
       return;
     }
-    const payload = {
-      type: 'buyurtma',
-      group: currentGroup,
-      group_name: GROUP_INFO[currentGroup].name,
-      category: currentCategory,
-      text: text,
-      deadline: document.getElementById('orderDate').value.trim(),
-    };
-
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
-      window.Telegram.WebApp.sendData(JSON.stringify(payload));
-    } else {
-      console.log('ORDER (standalone test):', payload);
+    if (!phone) {
+      document.getElementById('orderPhone').focus();
+      haptic('error');
+      return;
     }
 
-    orderModal.classList.remove('open');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 1800);
+    const payload = orderingItem
+      ? {
+          type: 'buyurtma_mahsulot',
+          group: currentGroup, group_name: GROUP_INFO[currentGroup].name,
+          category: currentCategory,
+          item_id: orderingItem.id, item_name: orderingItem.name, price: orderingItem.price,
+          phone: phone,
+          deadline: document.getElementById('orderDate').value.trim(),
+        }
+      : {
+          type: 'buyurtma_erkin',
+          group: currentGroup, group_name: GROUP_INFO[currentGroup].name,
+          category: currentCategory,
+          text: freeText,
+          phone: phone,
+          deadline: document.getElementById('orderDate').value.trim(),
+        };
+
+    sendOrder(payload);
   });
+
+  function sendOrder(payload){
+    // Agar backend manzili berilgan bo'lsa — shu orqali yuboramiz (tavsiya etiladi)
+    if (BACKEND_ORDER_URL) {
+      fetch(BACKEND_ORDER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...payload, init_data: tg ? tg.initData : null }),
+      }).then(() => onOrderSent()).catch(() => onOrderSent(true));
+      return;
+    }
+    // Aks holda — eski usul: sendData (faqat Keyboard Button orqali ochilgan bo'lsa ishlaydi)
+    if (tg && tg.sendData) {
+      try {
+        tg.sendData(JSON.stringify(payload));
+        onOrderSent();
+      } catch (e) {
+        onOrderSent(true);
+      }
+    } else {
+      console.log('ORDER (standalone test):', payload);
+      onOrderSent();
+    }
+  }
+
+  function onOrderSent(failed){
+    orderModal.classList.remove('open');
+    orderingItem = null;
+    haptic(failed ? 'error' : 'success');
+    toast.textContent = failed ? 'Xatolik — qayta urinib ko\'ring' : 'Buyurtma yuborildi ✓';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+    // Eslatma: sendData() ishlatilganda Telegram odatda Mini App'ni avtomatik yopadi.
+    // Agar shu yopilish keraksiz bo'lsa — BACKEND_ORDER_URL orqali yuborish usuliga o'ting,
+    // shunda ilova ochiq qoladi va foydalanuvchi davom eta oladi.
+  }
 })();
 </script>
 
