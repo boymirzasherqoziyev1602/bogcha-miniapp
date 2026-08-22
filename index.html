@@ -6,530 +6,437 @@
 <title>Bog'cha hujjatlari</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
   :root{
-    --bg:#FAFAF9; --card:#FFFFFF; --ink:#17181A; --ink-soft:#8A8D91; --border:#EEEEEC;
-    --c-tayyorlov:#F3A79C; --c-katta:#9CBDEC; --c-orta:#F0CE84; --c-kichik:#9BD9BC;
-    --accent:#3F7D5C; --accent-soft:#DFEEE4;
-    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.06);
+    --bg:#F7F8FA; --card:#FFFFFF; --card-muted:#F1F3F8; --ink:#171B2E; --ink-soft:#6B7280; --ink-faint:#A0A6B4; --border:#EBEDF3;
+    --blue:#0B57D0; --blue-soft:#E8F0FE; --pink:#F0116B; --pink-soft:#FDE6F0;
+    --orange:#FF9900; --orange-soft:#FFF1DB; --yellow:#FFBD00; --yellow-soft:#FFF6DB;
+    --font-head:'Baloo 2', sans-serif; --font-body:'Inter', sans-serif;
+    --shadow: 0 1px 3px rgba(23,27,46,0.05), 0 10px 24px rgba(23,27,46,0.06);
+    --overlay: rgba(17,20,34,0.45);
   }
   html.dark{
-    --bg:#16181A; --card:#1F2224; --ink:#F3F4F4; --ink-soft:#8E9296; --border:#2C3033;
-    --c-tayyorlov:#7A3A34; --c-katta:#2E4C6B; --c-orta:#7A6428; --c-kichik:#2E6350;
-    --accent:#5FBF8E; --accent-soft:#22352C;
-    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 12px 28px rgba(0,0,0,0.4);
+    --bg:#11131C; --card:#1B1E29; --card-muted:#242737; --ink:#F2F3F8; --ink-soft:#9BA1B4; --ink-faint:#666C80; --border:#2B2F41;
+    --blue:#5B9BFF; --blue-soft:#1B2B47; --pink:#FF5D9E; --pink-soft:#3A1D2C;
+    --orange:#FFB454; --orange-soft:#3A2C15; --yellow:#FFD166; --yellow-soft:#3A3116;
+    --shadow: 0 1px 3px rgba(0,0,0,0.35), 0 10px 24px rgba(0,0,0,0.4);
+    --overlay: rgba(0,0,0,0.6);
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;}
-  body{background:var(--bg); color:var(--ink); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; padding-bottom:96px; transition:background .2s ease, color .2s ease;}
+  html,body,#root{margin:0;padding:0;min-height:100vh;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); -webkit-font-smoothing:antialiased; transition:background .2s ease, color .2s ease;}
   button{font-family:inherit; cursor:pointer;}
   a{text-decoration:none; color:inherit;}
-  input, textarea, select{font-family:inherit;}
-
-  .screen{display:none;}
-  .screen.active{display:block;}
-
-  .theme-toggle{
-    position:fixed; top:16px; right:16px; z-index:40;
-    width:38px; height:38px; border-radius:50%; background:var(--card);
-    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
-    font-size:17px; box-shadow:var(--shadow);
-  }
-
-  .hero{padding:36px 60px 8px 24px; max-width:520px; margin:0 auto;}
-  h1{font-size:clamp(24px,7vw,30px); font-weight:800; line-height:1.2; margin:0 0 8px; letter-spacing:-0.02em;}
-  .hero p{color:var(--ink-soft); font-size:15px; line-height:1.5; margin:0; font-weight:500;}
-
-  .grid{max-width:520px; margin:22px auto 0; padding:0 24px; display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-  .card{border:none; border-radius:20px; padding:22px 16px; display:flex; flex-direction:column; align-items:flex-start; gap:24px; min-height:120px; color:#17181A; text-align:left; position:relative; transition:transform .12s ease;}
-  .card:active{transform:scale(0.96);}
-  .card[data-group="tayyorlov"]{background:var(--c-tayyorlov);}
-  .card[data-group="katta"]{background:var(--c-katta);}
-  .card[data-group="orta"]{background:var(--c-orta);}
-  .card[data-group="kichik"]{background:var(--c-kichik);}
-  .card-emoji{font-size:26px;}
-  .card-label{font-size:16px; font-weight:800; line-height:1.25;}
-  .card-arrow{position:absolute; top:16px; right:16px; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,0.14); display:flex; align-items:center; justify-content:center;}
-  .card-arrow svg{width:13px; height:13px;}
-
-  footer{max-width:520px; margin:26px auto 0; padding:0 24px; text-align:center; font-size:11px; color:var(--ink-soft); font-weight:500;}
-
-  .topbar{max-width:520px; margin:0 auto; padding:18px 60px 0 24px; display:flex; align-items:center; gap:12px;}
-  .back-btn{background:var(--card); border:1px solid var(--border); border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
-  .back-btn svg path{stroke:var(--ink);}
-  .topbar-title{font-size:19px; font-weight:800;}
-  .topbar-sub{font-size:12px; color:var(--ink-soft); font-weight:600;}
-
-  .section{max-width:520px; margin:0 auto; padding:18px 24px 0;}
-  .channel-btn{
-    width:100%; display:flex; align-items:center; justify-content:center; gap:8px;
-    background:var(--ink); color:var(--bg); border:none; padding:14px 18px; border-radius:13px;
-    font-weight:700; font-size:14.5px;
-  }
-
-  .cat-list{margin-top:20px; display:flex; flex-direction:column; gap:10px;}
-  .cat-row{
-    background:var(--card); border:1px solid var(--border); border-radius:15px;
-    padding:16px 16px; display:flex; align-items:center; gap:14px; text-align:left;
-  }
-  .cat-icon{width:44px; height:44px; border-radius:12px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;}
-  .cat-body{flex:1; min-width:0;}
-  .cat-name{font-weight:800; font-size:15px; margin-bottom:2px;}
-  .cat-count{font-size:12px; color:var(--ink-soft); font-weight:600;}
-  .cat-arrow{width:20px; height:20px; flex-shrink:0; opacity:.4;}
-
-  .search-row{display:flex; gap:8px; margin:18px 0 12px;}
-  .search-input{flex:1; padding:11px 14px; border-radius:11px; border:1px solid var(--border); background:var(--card); color:var(--ink); font-size:14px;}
-
-  .item{background:var(--card); border:1px solid var(--border); border-radius:15px; padding:14px; margin-bottom:10px; display:flex; flex-direction:column; gap:10px;}
-  .item-top{display:flex; gap:12px;}
-  .item-thumb{width:64px; height:64px; border-radius:11px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; overflow:hidden;}
-  .item-thumb img{width:100%; height:100%; object-fit:cover;}
-  .item-body{flex:1; min-width:0;}
-  .item-name{font-weight:800; font-size:14.5px; margin-bottom:4px;}
-  .item-price{font-weight:800; font-size:13px; color:var(--accent); margin-bottom:4px;}
-  .item-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.4;}
-  .item-actions{display:flex; gap:8px;}
-  .item-view-btn{flex:1; text-align:center; background:var(--bg); border:1px solid var(--border); border-radius:9px; padding:9px 10px; font-size:12px; font-weight:700; color:var(--ink);}
-  .item-order-btn{flex:1; text-align:center; background:var(--accent); border:none; border-radius:9px; padding:9px 10px; font-size:12px; font-weight:800; color:#0B120E;}
-
-  .empty-state{text-align:center; padding:24px 16px; color:var(--ink-soft); font-size:13px;}
-
-  .order-btn{
-    width:100%; margin-top:6px; background:var(--card); border:2px dashed var(--border); color:var(--ink);
-    padding:14px 18px; border-radius:13px; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;
-  }
-  .order-btn:active{border-color:var(--accent);}
-
-  .modal-overlay{position:fixed; inset:0; background:rgba(0,0,0,0.5); display:none; align-items:flex-end; z-index:50;}
-  .modal-overlay.open{display:flex;}
-  .modal{background:var(--card); width:100%; border-radius:22px 22px 0 0; padding:22px 22px 28px; max-height:85vh; overflow-y:auto;}
-  .modal h2{font-size:18px; font-weight:800; margin:0 0 4px;}
-  .modal .sub{font-size:12.5px; color:var(--ink-soft); margin:0 0 18px;}
-  .field{margin-bottom:14px;}
-  .field label{display:block; font-size:11.5px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;}
-  .field input, .field textarea{width:100%; padding:12px 14px; border-radius:11px; border:1px solid var(--border); background:var(--bg); color:var(--ink); font-size:14px;}
-  .field textarea{min-height:80px; resize:vertical;}
-  .modal-actions{display:flex; gap:10px; margin-top:6px;}
-  .btn-cancel{flex:1; background:var(--bg); border:1px solid var(--border); color:var(--ink); border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
-  .btn-submit{flex:2; background:var(--accent); color:#0B120E; border:none; border-radius:12px; padding:13px; font-weight:700; font-size:14px;}
-
-  .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--bg); font-size:13.5px; font-weight:700; padding:12px 20px; border-radius:999px; opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; box-shadow:var(--shadow); z-index:60; white-space:nowrap; max-width:88vw; text-align:center; white-space:normal;}
-  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
-
-  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+  input, textarea{font-family:inherit;}
+  .wrap{max-width:520px; margin:0 auto; min-height:100vh; padding-bottom:40px;}
+  .fade{animation:fadein .25s ease both;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  ::-webkit-scrollbar{display:none;}
 </style>
 </head>
 <body>
+<div id="root"></div>
 
-<button class="theme-toggle" id="themeToggle">🌙</button>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback } = React;
 
-<!-- HOME -->
-<section class="screen active" id="homeScreen">
-  <div class="hero">
-    <h1>O'z guruhingizni tanlang</h1>
-    <p>Kanal, ko'rgazmalar va hujjatlar — barchasi bir joyda.</p>
-  </div>
-  <div class="grid">
-    <button class="card" data-group="tayyorlov">
-      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="card-emoji">🎒</span>
-      <span class="card-label">Tayyorlov<br>guruhi</span>
-    </button>
-    <button class="card" data-group="katta">
-      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="card-emoji">🧩</span>
-      <span class="card-label">Katta<br>guruh</span>
-    </button>
-    <button class="card" data-group="orta">
-      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="card-emoji">🖍️</span>
-      <span class="card-label">O'rta<br>guruh</span>
-    </button>
-    <button class="card" data-group="kichik">
-      <span class="card-arrow"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H9M17 7V15" stroke="#17181A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="card-emoji">🧸</span>
-      <span class="card-label">Kichik<br>guruh</span>
-    </button>
-  </div>
-  <footer>Bog'cha hujjatlari · Ichki portal</footer>
-</section>
+const LOGO_SRC = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wAARCADIAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6KooopiCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiloASiqGka5p2ui5On3HnfZZjBL8pUq46jB/nXD6L8RL8axLJrkMUeiXN3JaWt3GuBC6NgK/sRjn+mcdMMLUnzWWq6dTCdeELXe56PVaTUbKHUYbCS6iS7nUvHCW+dwOpA/CrPWvOfHK6iPid4XbSZbeK9khnjje4UtGOOcgc9CaWHoqtPlbto39yuOtUdKPMlfVfizu01WxfWH0pblDfRxiZoOdwQ8Z/Wix1aw1O0kubK8ingjZkeRW+VSOoJ9q890ZNZtPjJOusT2tzfS6QzK1shRCAwwMHvxVDwzren6X8EtUWW9hjvj9pV4WcCQSNlQNvX0rslgVZcrv8P43/wAjmWLd/eVvi/C3+Z61DLHcRLLBIksbDKujBgfoRTq4GHQrRfhJpv26a7tH0yy+1ZtpjE6MVLc4+veneHLjxR/wq+w1CG9t7i/bdcyNqJYhoecLuHI4AOTWEsMrNxls7a/M1Vd3ScelzvKKwfBniOXxV4bi1WWy+x+Y7KFD7gwBxuHA4zn8q3I5Y5oxJFIkiHoyMCD+IrlqU5U5OEt0bwmpxUo7MdRRRUFhRRRQAUUUUAFFFFABRRRQAUUUUAFFFcz4i8Sz2ln9q0FY9XaxuFS+tbc75NjAjAxnBBwfwrSnTlUfLEic1BXY/XvGdro+pJpltY3mramyeYbWzTcyL6segrn/ABbruueE/FdnqsKPeWGqQi2FnNLsSCfjHPQZ9frUJ1K48F+OtV1TUdLvJ9O1tY5Ungi8x4WC/wCrYDp1/QVpW1pe/EC21Ia3ZzWOhT7BZW8ihLjKnJlJ6rnpj3NepCnCjyzkk4W1d979F5p/lucEpzq3inaV9F2t39TH0y08R+FPHsOo6jDFPH4hLJcxWMbFIJQMqT/U+7VP4X+GFvN4eUeJkunuZXkc2puT5UJYnBCqcbsc55r0aGMQQJEpYqihQWOSQBjk96dXPPH1Gvd0emq02vb8Hb5G0cJBP3tVro/O1zm7bw1qun6ZaabY+JbiK2t02F5LdJZm54AY8AAcDg/WtGz0K3gMEt3LJqd3bszRXV0qtJHu6hSAMD6Vp0VyyrTlv+SOhUorYiNpbG8F2beL7SF2CbYN4X03dce1Zlx4R8PXWp/2hPo1nJd7txlaIZJ9T2J+tbFFRGpOPwuxThGW6OU134e6bruoXF017qFn9rCi6it5tsdwF6bgQazte0Dxg9teaNpFxYPo14iwxmXKSWcYAUqMfeGB15PNd5RXRDF1I2vrba+v9bfpsYyw8JXtpfseSapqGppp1volrp+q6Z4WsMWt5ex258+UAfMQvVUJ6kZ6/hWx8Mkli+H2pSaKkTO15ObRZ2ITAwFyeuOK9DrhdU8Napong1fD3hfzJBfXLLLdSMA1vG5yx7Z9MiutYmNan7Gyi216dbt+f/DI5nQlSn7S99H6+SRd8JfEHTfErmylKWWqxkq9uzhlcjgmNujD9f511tefa6dI8E6PpOjaVpsWoa4pxp8ZQNIHPDSse3Of8jjsdCg1K20O1i1e6S7v1T99Ki7QT6fh0z3rmxNOCXtaatF7J7+q8v61N6FST/dz1a3t+XqaFFFFcR1BRRRQAUUUUAFFFFABRRWP4t1w+HPCl/qqRiSS3jyinoWJCjPtkirhBzkoR3ZMpKEXJ7Io/Ea7vbH4fapPYF1mCAF0+8qFgGI/Amub1O60jw78NoLzwnqttYSKY5U8sK73jj/lm4+8SSefT6VHqugeJtM8MS+JD4rubi+ih+0T2soBtXTGWQL0xg49/auh8NeEfDDQWPiC10OC3uriFJ1BywjZgD8oJwOvpXqxdKhSV3zJS6bN6aO/Ts9euh50uerUdlZ269PNW/FHS6bNdT6XazXkQgupIlaWNTwjEZI/A1YoquuoWT3bWq3lubhDtaISDeDjOMZz0ryHq7nqRi2tNbFiignAJwTjsO9clJr94mqmV1ZEQ7TAfT/H3ryswzOjl6g6t/edtPz/AK1Oihhp178nQ62io7e4jurdJoW3Iw4qSvShKM4qUXdM52mnZmMviW2a4EPkTZLbM8euPWtmuKji/wCKkEXpcf8As1drXgZHjcRi1Vdd35XZaWO7G0adJx5OquFFRXV1FZ27TTNhF/M+wrl7fXrx9W8wK0iSHb5I549veuzHZth8DOFOpvLt0Xcyo4WdaLlHZHW0UVXOo2QvFtPtlv8AaWJAi8wbyQMnjOeleqcyi3sjlPEXhu90/wARf8JfoEa3GoImy5tJeRPHjB2E/dbA7df50z8UG1C+Sw0HQLu7u5EMim6YW6bR1OW5IH4V39cZ8TtEl1jw7CbSEfa4Z1AufM2G2jbh2J/u46j057V6OHqwqyjTrq/RPt67XS9f0OGtTnTi50nbq1/l2L3gTxHf+KNBlv7+0htyJ3ijaFiUkUdxn3yM98V0teZweMJJLeLwx8PLFb57KEI13LhYowP4gD94k9/U967TwtryeI/D0F+EMU3MVxEescq8Mv5/oajFYeUG6nLypvbqu110uVh6yklC9336PvY2KKKK4TrCiiigAooooAK8+8ReO9IuZb3SNS0u6k0J3ayn1FOUEoGdoAGSQR19R0rvp0eS3kSKTypGUqsgGdhI4OO+K8ll8PeKPCb6YtxZJ4h0TS7h7pUtRtlZzn5nU5LEEk9/rXo4GnTk25vXor2+57X2tc4sXOcUlFaddL/f5Frw14b/AOEq0dbdPGN5f+HYJBG1k0HlS/LgiN2646f/AFq9RjjSKJI41CIgCqoGAAOgrmvAWnT2ugS6heR+Ve6vO99MmMbN/wB1cey4/OunJABJOAO5rPGVXOo430T8vnslf16l4WmowTtq/X9fyM291y2sbwW8iux4LFei5rE8a+FYNS0m4vtM06BtaRo5Y5kASVtrAkBvXAI5qlrnjXwlBfhpme6lXgtEQEbHuSN31FbOg+OdC8RSSQ2l2I5413NFLhTt7kHOCPoeK8fDRxcalR12uW/u27eZ9LChicJGGJpU5K2972fr5Euh+KI9Zv57CXT7zTb2GMSmC6QAshONwIPIzxVzVNHh1FN3Ec4HDjv7H1rkdR8beDdM8VPqv9pTXF4bf7K62y749obdnPTOfQ1paZ8TfC2qTCFNQ+zSNwBcoYwfx6frW2IwtPE03TqxvFhUwOKg1Xw9GUY2XR6d/kNsbq40G+MFyhETn5h2/wB4V1qOsiK6MGVhkEdxWLq+teHY5Fs9Sv7YSn5hHuy4Hr8vIrTsbyzvLYPYzxTQr8o8sgge3tXm5bgK2B5qXNzU/s33Xdehx4pupFVZQab620Zz6Rf8VoR6SF//AB3NdNJIkUbSSMFRRkk9hTfs0In8/wApPNPG/HP51Ab6xnv5NLM8clyI/MeDOSEPGT+daYDATwkaqjq5ScvS+1zDEYiNRwvpZJHOXdxc+INQEVuh8pPug9AP7xrf0zSYNNjyvzzEfNIR+g9BXOjx94V0uaSyt5JGETYZkT5Sf94kZpx+J3h1VJ8yc454VT/7NV5fw1iKU3isTBzqy620XoYV84w8l7KnNKK8/wAzQ1zxSmlagmm22nXupX8kJm8q1QEomcBiSeOap+CfCdvo+jWdzfadAutFWaacgNJlmJ5b1wQDiqemeK/CWoeKW1VdRlhvJLcWoS4XYgXdu4PTJPqa7K5maK0eaKMzMFyqqfvV6uIhPDJ+1i112Z1Qx1KdFUcI97czvu9dN7W1JabJGksTRyKHRwVZSMgg9QaZbSvNaxySRmJ2GSh6ipawhJSipLqcrVnZnnOs+GdRXxkJ9Dnt/DNlpunhEuxGvlybmOVI6YGD19j3p/gbXNF0y6Tw5pdxd63cTzPPd6hHEfKWQjJJPocAf1rq/EPhfTPFENtDqiSyRW8nmBEkKBzjGGx1FaFhp1npdotrYWsVrAvRIlCj/wCvXpyxUZ0eSd2/kvm3u+9tEcEcPKNXmjov62WyLFFFFecdwUUUUAFFFFABRRRQAV5Z8X/GElnGvh6xlKSTLvunU8hT0T8ep9seteqd6+ZfGkOqR+LtQl1a3eC4mmZxu6Fc/LtPcYxWlNXZ9Xwtg6WJxnNVt7iul3f/AAN/uJvBPg+fxjrDWyymC2hXfNNjJUdAAPU/0NUfEtlp+l+Ibmx0u4muLe3PlGWTGWYcNjHbPFek+Ab218J/Cq/124JV7mZlj2jJZgNqAfjk/nXkJYsxZjkk5JPetk22z7/BYitisbXbf7uHupdG+r+QlFFFWe8aOiaams6vFYPdC2kuPkidxlS/8Kn0BPGe2RWloHijVvB+ug7nxBIY7i3c/eAOGX/D0Nc/HI8MqSxkq6EMpHYjpXbePPDep3XjWaex0y6nW9SOfMULMNzKN3IGOuah72Z5GLdJ1vYYizhOL3to1a/3p/Kx7bpPlXMZ1O3unnt75VljB6AHmqWh6DLYanrlzdeW7ahcF45FOX8vGAp9MVV+HWk6povg2Cy1YBJVdmSPOTGhOQpPrnP510N/M1vpt1Mn3o4XcfUKTXPQiqEXSpbS/wA7/mfieYUaccRK0uZQbs11W35Hzjq1lHp2sXdnFOtwkErRiQdGwap0pYsSzHJPJPrSV+tQTUUm7s/JZtOTaVkFeg/DbxlPZajDot9KXs5zshZjnyn7D/dPTHY159T4WKTI6v5bKwIb0I71zYvDQxVJ05r/AIDOjC4meGqqpB/8E+hdU15tPvhAIA4ABYk46+lbCncoI7jNZmlXdj4h0231FYkkOMHeoJVh1FalfkNKhiaNar7ed03orbH6i6lKpTi6a6b9wooorrMwooooAKKKKACiiigAooooAwvFXi7TvCFhFc3wkkaZ9kcUQBZsdTz2FM0nxJoHi2xjdPLkD9IbqMBs/Q8H8Kh8a+CLPxpZQRz3ElrcWxJhmQZxnqCO44FchfeENR8PaaRFbtdw28fDQDcTgenXP+NcGPxNbDxi6FPnbdn6Hu4ejl9TCpym41Ve/a39edzq/HPhQ674Mk03TYooZYXE0MagIpIzlfQZBP41896hp93pV89nf20ltcIMtHIuCB2NdroXxS1XS5BDcuzoDgxTgnHtzyPzFbusa/4Q+IaQ2l7JJpmpqCIbrZuRe+1jxlfr09a+krYCvhbKaTv2/q50cKcTuClTlBuknduz92/Vvaz+/seZaNpUmt6vBp0M0UM05KxtMSFLY4GffpXSy/CfxdG+0afHJ7rOmP1NcpeQfYdRmgSdJvIkKrLEflbB4ZT6d69E8H3vxB8T2RSw1sRWcbeU085UupwDgcFicEf41ySuj9FzLE4mjFYihUgoW157/erfkcxpngzUZvHFv4fuY1WcMrXARw4jTgtkjjOP1Ir6OkmhtoWZ3WOOMc89BWL4W8I2fhe2lMbvdXtwd1xdy8vIev4D2p+r6M9/fxtCBGGU+ZIehI6ceteXmGIrUqXPQhzy2t6/15adT87zbM45rXipStGK3tu+rt0v03ZTvvD1zb69b63oc0iyzTg3kLyny5Yz1IB6Edq6aRFkjaNxlHBUj1BplssyW6LOyvIBgsowDUldrrzqwi57pfP0fofKxoxpyly7P7v6Z8+XHhHUV8V3GhW8avcoWMYdwnmJ1BBPXjn86vxfDHxTI4U2Ucfu06Y/QmvV/E3hW28QRxSmV7O/t+YLuPhkPofUV514s1Hxv4etVi1DWA9rM3lJNbldznGcHADDivssNmlfFKMKUoqXVSvv3Xf0PksRllHDOUqsZNdLW+59vU4vVLBtL1OexkmimeBtjNEcru7gH2PH4UywsbrVL5bOxt5Lm4YbhHGuTj1+lFjbre6hBbyXEduszhTNKcKme5r0TTvE3hbwNbz2mliTUr/pNcldqseuAeuOeg/OvVxmMlhoKEFzzt2/E4cBlzxs+b4YXtdtLV7K70+87fwXoc/h/wAMQWd0wa5JMkgByFJ/h/AACl1/xjo/hy1ea7nMjKceVCN7Z9PQfia8Z134qa1q8/kwF0jLY8qIFc+2ByfxJrrrTwZqHiLTNssJs4LhAd04wwyOu3rnp+VflOZYzEwxEGqfNzvVrp3P2Sjw/TwEIPGztHsnrb1/yO68LeK9P8W6a95YCRPKfZJHIAGQ9R07Gtuuc8GeDLPwZp0tvbTyXM1wweaaTjcQMAAdh1ro67Xa+h4mMVBV5fVr8nS4UUUUjlCiiigAooooAKKKKAOR8a/EGx8IKtuIjd6hIu5YQ2Ao7Fj2+nWvKdS+KPiLU94e4a3QniO2YxKB9R8x/wC+q6n4g/DbW9Y8Sz6tpZjukuAu6JpAjIQoGBngjj1rn7H4P+KLqQC4S2s07tJKGP5Lmt48qR+j5TSyWhhY1as4ubV3d6p9kvL01OLurx7x98iruJLFuSxPuSSTVUuvTcPzr2mL4KaRFZKt5qV9LOfvNAFRfyIOPzrQsPhZ4VtFANpJdkd5pmb9EAFX7ZdTslxLllCLhRTt5R389bfieJW15BHB5VzbLJETkOOo+hFWVs4phv0+8wf7jttP4N0/PFe7r4B8ML93QbUf9sX/AMazr74XeFrnJjtJLGQ/xQTPH+j5Fewsfg60FGtTaa6o/Mf7QzPBYqdbAV/ck2+WS93Xpa7S9U0eOR63r+kShY9Sv7ZsZAEzAEfnit/Tfi34psiFkuor1R1W4iGfzGDXZ6/8PmlsPLi/0uONf3a7Qsw/3T0b6V402n3kl+LSG2m+2b/L8goQ+f7u319q+cwleeI5lUpuLT9brpZ/n2P1XCYrL80pfvYRckry0+936fNnfXHxk8RXGQi2tqP+mUe4/wDjxNYl34+8R377X1O8bd2WTyx+S4qg/hPxFDGGm0LUE/7d2P8ASoLK0mEyxi2mkuZH2LCiEydem3rmvpsrk5VOVRjZat2V7HxHF2VZLhME8TRlLnk7RjGbabfdO+i3e3YvfaL67yZJ55mAyxLs2PzqvNcW1tzPcb2/uRncfxboPwzXq2leAGawMNwwtoZFxIigNIcj+In5Qfzq3YfCvwnagFrF71x/FPM8mfwXArkfEdfEOap03Tgtr25mu77HzmU5LlODiqmYt1anZfCvyv8Al5HiLaqk8gUQ+VEOcqTuJ9z/APqqyk0ZwPMUse2ea95HgLwwo40C1GO/kv8A41n3/wAM/DF4hX7LJak94pmX9HBFehl+b0aEWqt231t/wbnDxHR/tOtGWFpqnCKslf8AS1l9549by/ZZRLHGiyA7g4yrA+zAgiuo034j6/ppUC4NzGDzHcnzAR7E/MPzrrH+D+mPZFbLUr2OYH5WuArr9OAPzzXNXfwr8SW8hEMdvdL2aOUD9GxXqLGZbiladvmrHy1TDZnh2mm36O56T4R8bWXiqJ41Q217Eu54GOcj1U9xXS15p4C8A6to2vJqmpGO3WJGVYlcMzkjHOOAK9Lr5HMKdCnXawzvH+tLn1GAqV6lFPEK0gooorzzvCiiigAooooAKKKKACiiigChqF5bW7r580ceBn5mUH9cn9KzJPEmmJwbnzPoHb/AVrajpVpqkOy5iBI+644Zfoa4jV/DN3pe6VAbi3H8ajlfqP6189muLzDC3nRgnDvq2vVXPWwNDC1/dqSal+BtHxTpmejn/tj/APZVLF4m01zgTtHn1DL/AIiuE8xP76/nSgg9CDXzC4kxqd3Z/I9p5Nh2uv3npMVzBcRloZEdT1KkY/HHH5gVh+JfC1nr6pOcW2pW5DwXaj5kYcgN/eX+XY1ysU0kEgeKRo3HRlODW3aeJ5kjKXMYlbB2sOCT2z/j/OvcwXE1Ko1HELlffdf8D8TieW4jCTVbCy1X3/5M7h5Ln+y2dRGt0Ysj5vkD49fTNc54e8OWWgwsYv395LkzXTj55CeuPRfb8zXnaT/EZdTF22pQtHuybYy/utufu7cdPfrXX3viaZ18u0Xyh3c8nPt6V69biDCYek1CopX6R1bOOtkNT2sZJxk+6eiOrmuYLdA08qRqOhYj9M8fkDVCXxPpqnBmaT6Bm/wFcRJLJNIXldnc9SxyaYWA6kCvlK/E+Ik/3MEl56v9D06WSUkv3km35aHajxTpmejj/tj/APZVPF4k0x+BdbM/3g6/4iuC8xP76/nW7o/he71LbLNm2tjzuYfM30H9aeFzvMsRU5KcVJ+n/BCvlmDox5pya+f/AADtNPu7e4ZvImjkyM/Kyn+WD+lXqqafpdppkPl2sQXP3mPLN9TVuvuaPteRe2tzdbbHzFTk5n7PbzCiiitiAooooAKKKKACiiigAooooAKKKKACiuLvvibYW15exWmlanqMGnsVurm2iBjiI68k9sH8qu6l4/0ew0TT9RjE96NTOLSCBMySnoRg9MHj610/VK2nuvX/AIf8jD6xS197Yfq/gjTdTm86ImzlJ+YxgFW/Cspvhsn8GpsPrF/9etbw940tNe1O40t7K803UrdPMe2u02sV45GOvUfnVjxN4rsfC1tbvdRz3E10/lQW8CbpJW9APxH515NXIsPUq8sqXvPtdfk7HpU83rU6d41PdX9dTn/+Fd3Sf6vVV/GM/wCNKPAupL/y+2z/AFVhWroPjey1nU7jTJ7O70rULePzXt7xAp2f3gfxFZLfFvRBcFhZai2mrL5J1EQ/uA3164/X2rF8K0JtxVJ3Xmyv7fqpJua+5f5E/wDwjGrl9mbfZj7+41D/AMILqLf8v1sg9lY1ra942sdEvLSxitrrVL68TzYbezQOzJ/ez6cH8qn8M+LbHxOt0lvDcWt1ZvsuLa4TbJGecZ/I/lXPDhTC04e0cHb1LWd1ebkjJX9DB/4V3cv/AKzVV/CM/wCNPX4bJ/HqbH6Rf/Xq9rfj6y0HX4tLu9N1EmaRIkuFjHlMzY6MTzjPNSeIfHNhoOqJpaWt3qepOu/7NZx72VfU+ldUOGsPpalvqtXt95Es9r6/vNvJf5Emj+CtO0qXznzdzA/K0gGF+g9a6Ks7QtY/tzS1vfsN3YEsyGG6TY4I4PHpWJr3xD0/RdXfTIbG+1S7hTzJ0s49/kr1+Y/SvQw2Xqk3RoQtbf8A4LOPEYx1P3taV7nWUVys/wAQ9GTw3a6xbpd3sd3J5UUMEJaQyDqpHQH8ee2ak8N+ObHxFqU+mmzvNO1CBfMa2u49rFeOR+Y/Oul4WsouTi7LcwVem2oqWrOmooornNgooooAKKKKACiiigAooooAKUdaSigDwa0aO6tvFs0viVfDbyzy79MH/LTg9cnPJyPl/lgU+6uzc+GPAcMsa6FGJJCuo4b9ztbG4ZP8X3uf5V7Pd6DpF9dC5u9Ksricf8tJYFZvzIqxc2Npe2v2a6tYZ4P+eckYZfyPFe28zjdPl/LTS3bX537HlfUZWa5v6vf5fI8w8HSCL4wXkceqDxH51ll9Q7w4x8vB29gOPb3q38WZA2qeGrd5Rp8bXJf+0znNuRjp29+fQe9eg2Ol2GlxmOwsre0RjkrDGEB+uKkurO2vrdoLu3iuIW6pKgZT+BrneNj9YjWtolb8LX7fLY3+qv2Lp33d/wAfv+Z47ZRSz+P9YsrLVR4knvdIljF+OsJ2nC5U7eSAPxHvUUPiXRo/gbLoLyqNVG6D7IVPmGQy5zj6fyxXsdhpen6XGyWFjb2itywhjCZ+uKYdF0ttR+3nTbQ3mc+f5K78+u7Gc1s8whJrmi7KzWy1XfS1vQyWDmk7Pe6+T/rqeRX8M1r4t8L2F9qP/COz2ekoDqJ+8x2nMfJ28cjn39q3PhbIE8VeJ7eO4GqoZEkOqDOZjz8p7dyePftivRb7TLHVIhFf2VvdoDkLNGHA+madaWVrp9uILO2htoRyEiQIv5Cs6mPVSi4OOrVvxvfv8r2LhhHCop30T/S3p89zg/iyfm8L/wDYUT+lc9dQS2vxb8QR33iNvDqXKCWO4AAMy8YUM3QDvjrtr126sLS+8v7Xaw3HlNvj81A2xvUZ6Go7/StP1VVXULG2vAnK+dEHx9M1NDGqnBU2ujXTq0+voOrhXObmn1T+5WOY+GOualrnhy4k1KY3f2e5aGG6K7TOgx81YGgazp/hL4j+LU164Wze6kW4hklBxJHljgHvwRx7e1enQwxW0KQwRJFEgwqIoVVHsBVe+0jTdUKG/sLa7Mf3TNEr7fpkVmsTT56l42jLoumty3QnywtL3o9zzDwT4htfCHgTU9bv0dLe+v3exgAw0vHGPQcdfar/AMPryx1jxPceINR1ezm13UIikVlA2fs8Qwce5wB/k16Dc6XYXsEcF1Y208UX3EkiVlTtwCOKjtdD0mxuBPaaZZ28wBAkigVWGevIFa1MZTmpvlalLr5dv8+5EMNOLirpqP59/wDIvUUUV5Z3hRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQB//2Q==";
+const BACKEND_ORDER_URL = "https://bogchabujjatlari.boymirzasherqoziyev1602.workers.dev";
 
-<!-- GROUP SCREEN -->
-<section class="screen" id="groupScreen">
-  <div class="topbar">
-    <button class="back-btn" id="backToHome">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div>
-      <div class="topbar-title" id="groupTitle">Guruh</div>
-      <div class="topbar-sub">Bo'limni tanlang</div>
+const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+if (tg) { tg.ready(); tg.expand(); }
+
+function haptic(style){
+  if (!tg || !tg.HapticFeedback) return;
+  if (style === 'success' || style === 'error' || style === 'warning') tg.HapticFeedback.notificationOccurred(style);
+  else tg.HapticFeedback.impactOccurred(style || 'light');
+}
+
+const GROUP_INFO = {
+  tayyorlov: { name: "Tayyorlov guruhi", sub: "6-7 yosh", emoji: "🎒", color: "var(--blue)", soft: "var(--blue-soft)", link: "https://t.me/Tayyorlov_guruh_DMTT" },
+  katta:     { name: "Katta guruh",       sub: "5-6 yosh", emoji: "🧩", color: "var(--pink)", soft: "var(--pink-soft)", link: "https://t.me/Katta_guruh_DMTT" },
+  orta:      { name: "O'rta guruh",       sub: "4-5 yosh", emoji: "🖍️", color: "var(--orange)", soft: "var(--orange-soft)", link: "https://t.me/Orta_guruh_DMTT" },
+  kichik:    { name: "Kichik guruh",      sub: "3-4 yosh", emoji: "🧸", color: "var(--yellow)", soft: "var(--yellow-soft)", link: "https://t.me/Kichik_guruh_DMTT" },
+};
+
+const CATEGORIES = [
+  { id: 'korgazma', name: "Ko'rgazmalar", icon: '📸' },
+  { id: 'hujjat', name: "Hujjatlar", icon: '📄' },
+  { id: 'ishlanma', name: "Mashg'ulot ishlanmalari", icon: '📝' },
+  { id: 'ssenariy', name: "Ssenariylar", icon: '🎭' },
+];
+
+const CATALOG = [
+  { id: 1, name: "Milliy burchak ko'rgazmasi", category: "korgazma", groups: ["tayyorlov"], desc: "To'liq tayyor devoriy ko'rgazma, milliy ramzlar bilan.", price: 85000, image: "", telegram_link: "https://t.me/Tayyorlov_guruh_DMTT/10" },
+  { id: 2, name: "O'zbekiston xaritasi (A2)", category: "korgazma", groups: ["tayyorlov", "katta", "orta"], desc: "Devorga osiladigan katta xarita.", price: 45000, image: "", telegram_link: "" },
+  { id: 3, name: "Yillik mavzuli reja shabloni", category: "hujjat", groups: ["tayyorlov", "katta", "orta", "kichik"], desc: "To'ldirish uchun tayyor Word shablon.", price: 0, image: "", telegram_link: "" },
+  { id: 4, name: "Sentyabr oyi — 1-hafta ishlanma", category: "ishlanma", groups: ["tayyorlov"], desc: "To'liq mashg'ulot ishlanmasi, 5 markaz bo'yicha.", price: 25000, image: "", telegram_link: "" },
+  { id: 5, name: "\"Bayram konserti\" ssenariysi", category: "ssenariy", groups: ["katta", "orta"], desc: "Mustaqillik bayrami uchun tayyor ssenariy.", price: 35000, image: "", telegram_link: "" },
+  { id: 6, name: "Kuzgi barglar gerbariyi", category: "korgazma", groups: ["kichik", "orta"], desc: "Tayyor, nomlangan gerbariy to'plami.", price: 30000, image: "", telegram_link: "" },
+];
+
+function fmtPrice(p){ return p === 0 ? "Bepul" : p.toLocaleString('ru-RU') + " so'm"; }
+
+// ---------- Shared UI ----------
+function TopBar({ onBack, title, sub, themeMode, onToggleTheme, onNotify }) {
+  useEffect(() => {
+    if (!tg || !tg.BackButton) return;
+    if (onBack) { tg.BackButton.show(); tg.BackButton.offClick(); tg.BackButton.onClick(onBack); }
+    else tg.BackButton.hide();
+  }, [onBack]);
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "18px 20px 6px" }}>
+      {onBack && (
+        <button onClick={() => { haptic('light'); onBack(); }} style={iconBtnStyle()}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="var(--ink)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      )}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {title && <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 18, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</div>}
+        {sub && <div style={{ fontSize: 12, color: "var(--ink-soft)", fontWeight: 600 }}>{sub}</div>}
+      </div>
+      {!onBack && <img src={LOGO_SRC} alt="" style={{ width: 30, height: 30, borderRadius: 9, objectFit: "cover" }} />}
+      <button onClick={() => { haptic('light'); onToggleTheme(); }} style={iconBtnStyle()}>
+        {themeMode === "dark" ? "☀️" : "🌙"}
+      </button>
     </div>
-  </div>
+  );
+}
 
-  <div class="section">
-    <a class="channel-btn" id="channelLink" href="#" target="_blank" rel="noopener">Kanalga o'tish →</a>
-    <div class="cat-list" id="catList"></div>
-  </div>
+function iconBtnStyle(){
+  return { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "var(--shadow)" };
+}
 
-  <footer>Bog'cha hujjatlari · Ichki portal</footer>
-</section>
-
-<!-- CATEGORY SCREEN -->
-<section class="screen" id="categoryScreen">
-  <div class="topbar">
-    <button class="back-btn" id="backToGroup">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div>
-      <div class="topbar-title" id="categoryTitle">Bo'lim</div>
-      <div class="topbar-sub" id="categoryGroupLabel">Guruh</div>
+function Sheet({ children, onClose }) {
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "var(--overlay)", display: "flex", alignItems: "flex-end", justifyContent: "center", zIndex: 50 }}>
+      <div onClick={(e) => e.stopPropagation()} className="fade" style={{ background: "var(--bg)", width: "100%", maxWidth: 520, borderRadius: "22px 22px 0 0", padding: "20px 20px 28px", maxHeight: "85vh", overflowY: "auto" }}>
+        <div style={{ width: 36, height: 4, borderRadius: 2, background: "var(--border)", margin: "0 auto 16px" }} />
+        {children}
+      </div>
     </div>
-  </div>
+  );
+}
 
-  <div class="section">
-    <div class="search-row">
-      <input class="search-input" id="searchInput" placeholder="Qidirish...">
+function Toast({ text }) {
+  if (!text) return null;
+  return (
+    <div style={{ position: "fixed", left: "50%", bottom: 24, transform: "translateX(-50%)", background: "var(--ink)", color: "var(--bg)", fontSize: 13.5, fontWeight: 700, padding: "12px 20px", borderRadius: 999, boxShadow: "var(--shadow)", zIndex: 60, maxWidth: "88vw", textAlign: "center" }}>
+      {text}
     </div>
-    <div id="itemsList"></div>
-    <button class="order-btn" id="orderBtn">🛒 Boshqa narsa kerak — buyurtma berish</button>
-  </div>
+  );
+}
 
-  <footer>Bog'cha hujjatlari · Ichki portal</footer>
-</section>
+// ---------- Order Modal ----------
+function OrderModal({ context, onClose, onSubmitted }) {
+  const [text, setText] = useState("");
+  const [phone, setPhone] = useState("");
+  const [deadline, setDeadline] = useState("");
+  const [sending, setSending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-<!-- ORDER MODAL -->
-<div class="modal-overlay" id="orderModal">
-  <div class="modal">
-    <h2 id="orderModalTitle">Buyurtma berish</h2>
-    <p class="sub" id="orderContextLabel">Guruh: — · Bo'lim: —</p>
+  const item = context.item || null;
 
-    <div class="field" id="orderTextField">
-      <label>Nima kerak</label>
-      <textarea id="orderText" placeholder="Masalan: O'zbekiston xaritasi, A2 formatda, bosma"></textarea>
-    </div>
+  const submit = async () => {
+    if (!item && !text.trim()) { setErrorMsg("Iltimos, nima kerakligini yozing"); haptic('error'); return; }
+    if (!phone.trim()) { setErrorMsg("Iltimos, telefon raqamingizni kiriting"); haptic('error'); return; }
+    setErrorMsg("");
+    setSending(true);
 
-    <div class="field">
-      <label>Qachongacha kerak (ixtiyoriy)</label>
-      <input id="orderDate" placeholder="Masalan: shu hafta ichida">
-    </div>
+    const payload = item
+      ? { type: "buyurtma_mahsulot", group: context.group, group_name: GROUP_INFO[context.group].name, category: context.category, item_id: item.id, item_name: item.name, price: item.price, phone: phone.trim(), deadline: deadline.trim() }
+      : { type: "buyurtma_erkin", group: context.group, group_name: GROUP_INFO[context.group].name, category: context.category, text: text.trim(), phone: phone.trim(), deadline: deadline.trim() };
 
-    <div class="field">
-      <label>Telefon raqamingiz</label>
-      <input id="orderPhone" placeholder="+998 90 123 45 67" inputmode="tel">
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-cancel" id="orderCancel">Bekor qilish</button>
-      <button class="btn-submit" id="orderSubmit">Yuborish</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast">Buyurtma yuborildi</div>
-
-<script id="catalogData" type="application/json">
-[
-  {"id":1,"name":"Milliy burchak ko'rgazmasi","category":"korgazma","groups":["tayyorlov"],"desc":"To'liq tayyor devoriy ko'rgazma, milliy ramzlar bilan.","price":85000,"image":"","telegram_link":"https://t.me/Tayyorlov_guruh_DMTT/10"},
-  {"id":2,"name":"O'zbekiston xaritasi (A2)","category":"korgazma","groups":["tayyorlov","katta","orta"],"desc":"Devorga osiladigan katta xarita.","price":45000,"image":"","telegram_link":""},
-  {"id":3,"name":"Yillik mavzuli reja shabloni","category":"hujjat","groups":["tayyorlov","katta","orta","kichik"],"desc":"To'ldirish uchun tayyor Word shablon.","price":0,"image":"","telegram_link":""},
-  {"id":4,"name":"Sentyabr oyi — 1-hafta ishlanma","category":"ishlanma","groups":["tayyorlov"],"desc":"To'liq mashg'ulot ishlanmasi, 5 markaz bo'yicha.","price":25000,"image":"","telegram_link":""},
-  {"id":5,"name":"\"Bayram konserti\" ssenariysi","category":"ssenariy","groups":["katta","orta"],"desc":"Mustaqillik bayrami uchun tayyor ssenariy.","price":35000,"image":"","telegram_link":""},
-  {"id":6,"name":"Kuzgi barglar gerbariyi","category":"korgazma","groups":["kichik","orta"],"desc":"Tayyor, nomlangan gerbariy to'plami.","price":30000,"image":"","telegram_link":""}
-]
-</script>
-
-<script>
-(function(){
-  const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
-  if (tg) { tg.ready(); tg.expand(); }
-
-  // ============================================================
-  // MUHIM ESLATMA (kod ichida qoldiryapman, keyin o'zingiz ham ko'rasiz):
-  //
-  // 1) sendData() FAQAT bot "Keyboard Button" (pastki tugmalar qatori)
-  //    orqali Mini App ochganda ishlaydi. Agar bot Menu Button yoki
-  //    inline "web_app" tugmasi orqali ochsa — sendData() jim ravishda
-  //    hech narsa qilmaydi. BotFather'dan botingiz qanday sozlanganini
-  //    tekshiring: /mybots -> botingiz -> Bot Settings -> Menu Button.
-  //
-  // 2) Bot tomonida (server/Python/Node kodida) web_app_data update'ini
-  //    qabul qilib, uni ADMIN GURUHGA forward qiladigan kod bo'lishi
-  //    SHART — aks holda xabar botga tushadi-yu, siz uni ko'rmaysiz.
-  //
-  // 3) To'lov: hozircha bu yerda faqat "buyurtma so'rovi" yuboriladi,
-  //    haqiqiy Payme/Click to'lovi yo'q. BACKEND_ORDER_URL to'ldirilsa,
-  //    bu yerdan sizning serveringizga so'rov ketadi (tavsiya etiladi).
-  // ============================================================
-  const BACKEND_ORDER_URL = "https://bogchabujjatlari.boymirzasherqoziyev1602.workers.dev";
-
-  // ---- Theme: avval Telegramning o'z mavzusidan olamiz ----
-  const themeToggle = document.getElementById('themeToggle');
-  let isDark = tg ? tg.colorScheme === 'dark' : false;
-  applyTheme();
-  function applyTheme(){
-    document.documentElement.classList.toggle('dark', isDark);
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-  }
-  themeToggle.addEventListener('click', () => {
-    isDark = !isDark;
-    applyTheme();
-    haptic('light');
-  });
-
-  function haptic(style){
-    if (tg && tg.HapticFeedback) {
-      if (style === 'light' || style === 'medium' || style === 'rigid') tg.HapticFeedback.impactOccurred(style);
-      else if (style === 'success' || style === 'error' || style === 'warning') tg.HapticFeedback.notificationOccurred(style);
-    }
-  }
-
-  const CATALOG = JSON.parse(document.getElementById('catalogData').textContent);
-  const GROUP_INFO = {
-    tayyorlov: { name: "Tayyorlov guruhi", link: "https://t.me/Tayyorlov_guruh_DMTT" },
-    katta:     { name: "Katta guruh",       link: "https://t.me/Katta_guruh_DMTT" },
-    orta:      { name: "O'rta guruh",       link: "https://t.me/Orta_guruh_DMTT" },
-    kichik:    { name: "Kichik guruh",      link: "https://t.me/Kichik_guruh_DMTT" },
-  };
-  const CATEGORIES = [
-    { id: 'korgazma', name: "Ko'rgazmalar", icon: '📸' },
-    { id: 'hujjat', name: "Hujjatlar", icon: '📄' },
-    { id: 'ishlanma', name: "Mashg'ulot ishlanmalari", icon: '📝' },
-    { id: 'ssenariy', name: "Ssenariylar", icon: '🎭' },
-  ];
-
-  let currentGroup = null;
-  let currentCategory = null;
-  let searchQuery = '';
-  let orderingItem = null; // agar aniq mahsulot buyurtma qilinsa, shu yerda turadi
-
-  const homeScreen = document.getElementById('homeScreen');
-  const groupScreen = document.getElementById('groupScreen');
-  const categoryScreen = document.getElementById('categoryScreen');
-  const SCREENS = [homeScreen, groupScreen, categoryScreen];
-
-  function showScreen(el, backAction){
-    SCREENS.forEach(s => s.classList.remove('active'));
-    el.classList.add('active');
-    window.scrollTo(0,0);
-    if (tg && tg.BackButton) {
-      if (backAction) { tg.BackButton.show(); tg.BackButton.offClick(); tg.BackButton.onClick(backAction); }
-      else { tg.BackButton.hide(); }
-    }
-  }
-
-  function fmtPrice(p){ return p === 0 ? "Bepul" : p.toLocaleString('ru-RU') + " so'm"; }
-
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => { haptic('light'); openGroup(card.dataset.group); });
-  });
-  document.getElementById('backToHome').addEventListener('click', () => showScreen(homeScreen));
-  document.getElementById('backToGroup').addEventListener('click', () => showScreen(groupScreen, () => document.getElementById('backToHome').click()));
-
-  function openGroup(group){
-    currentGroup = group;
-    const info = GROUP_INFO[group];
-    document.getElementById('groupTitle').textContent = info.name;
-    document.getElementById('channelLink').href = info.link;
-    renderCategories();
-    showScreen(groupScreen, () => document.getElementById('backToHome').click());
-  }
-
-  function renderCategories(){
-    const wrap = document.getElementById('catList');
-    wrap.innerHTML = '';
-    CATEGORIES.forEach(cat => {
-      const count = CATALOG.filter(it => it.groups.includes(currentGroup) && it.category === cat.id).length;
-      const row = document.createElement('button');
-      row.className = 'cat-row';
-      row.innerHTML = `
-        <div class="cat-icon">${cat.icon}</div>
-        <div class="cat-body">
-          <div class="cat-name">${cat.name}</div>
-          <div class="cat-count">${count} ta material</div>
-        </div>
-        <svg class="cat-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      `;
-      row.addEventListener('click', () => { haptic('light'); openCategory(cat.id); });
-      wrap.appendChild(row);
-    });
-  }
-
-  function openCategory(catId){
-    currentCategory = catId;
-    searchQuery = '';
-    document.getElementById('searchInput').value = '';
-    const cat = CATEGORIES.find(c => c.id === catId);
-    document.getElementById('categoryTitle').textContent = cat.name;
-    document.getElementById('categoryGroupLabel').textContent = GROUP_INFO[currentGroup].name;
-    renderItems();
-    showScreen(categoryScreen, () => document.getElementById('backToGroup').click());
-  }
-
-  function renderItems(){
-    const list = document.getElementById('itemsList');
-    list.innerHTML = '';
-    let items = CATALOG.filter(it => it.groups.includes(currentGroup) && it.category === currentCategory);
-    if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      items = items.filter(it => it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q));
-    }
-
-    if (items.length === 0) {
-      list.innerHTML = '<div class="empty-state">Bu bo\'limda hali material yo\'q. Pastdagi tugma orqali buyurtma bering.</div>';
-      return;
-    }
-
-    items.forEach(it => {
-      const div = document.createElement('div');
-      div.className = 'item';
-      const viewBtn = it.telegram_link
-        ? `<a class="item-view-btn" href="${it.telegram_link}" target="_blank" rel="noopener">To'liq ko'rish →</a>`
-        : `<span class="item-view-btn" style="opacity:.5;">Havola yo'q</span>`;
-      div.innerHTML = `
-        <div class="item-top">
-          <div class="item-thumb" data-thumb-for="${it.id}">🖼️</div>
-          <div class="item-body">
-            <div class="item-name">${it.name}</div>
-            <div class="item-price">${fmtPrice(it.price)}</div>
-            <div class="item-desc">${it.desc}</div>
-          </div>
-        </div>
-        <div class="item-actions">
-          ${viewBtn}
-          <button class="item-order-btn" data-order-id="${it.id}">🛒 Buyurtma qilish</button>
-        </div>
-      `;
-      list.appendChild(div);
-
-      // Rasm bo'lsa yuklashga urinamiz, bo'lmasa yoki xato bo'lsa emoji qoladi
-      if (it.image) {
-        const thumb = div.querySelector(`[data-thumb-for="${it.id}"]`);
-        const img = new Image();
-        img.onload = () => { thumb.innerHTML = ''; thumb.appendChild(img); };
-        img.onerror = () => { /* rasm topilmadi — emoji joyida qoladi */ };
-        img.src = it.image;
-        img.alt = '';
-      }
-    });
-
-    list.querySelectorAll('[data-order-id]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        haptic('light');
-        const item = CATALOG.find(x => x.id == btn.dataset.orderId);
-        openOrderModal(item);
-      });
-    });
-  }
-
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    renderItems();
-  });
-
-  // ---- Order modal ----
-  const orderModal = document.getElementById('orderModal');
-  const toast = document.getElementById('toast');
-
-  function openOrderModal(item){
-    orderingItem = item || null;
-    const cat = CATEGORIES.find(c => c.id === currentCategory);
-    const textField = document.getElementById('orderTextField');
-
-    if (orderingItem) {
-      document.getElementById('orderModalTitle').textContent = 'Buyurtmani tasdiqlang';
-      document.getElementById('orderContextLabel').textContent =
-        orderingItem.name + ' · ' + fmtPrice(orderingItem.price);
-      textField.style.display = 'none';
-    } else {
-      document.getElementById('orderModalTitle').textContent = 'Buyurtma berish';
-      document.getElementById('orderContextLabel').textContent =
-        'Guruh: ' + GROUP_INFO[currentGroup].name + ' · Bo\'lim: ' + cat.name;
-      textField.style.display = '';
-    }
-
-    document.getElementById('orderText').value = '';
-    document.getElementById('orderDate').value = '';
-    orderModal.classList.add('open');
-  }
-
-  document.getElementById('orderBtn').addEventListener('click', () => { haptic('light'); openOrderModal(null); });
-  document.getElementById('orderCancel').addEventListener('click', () => { orderModal.classList.remove('open'); orderingItem = null; });
-
-  document.getElementById('orderSubmit').addEventListener('click', () => {
-    const freeText = document.getElementById('orderText').value.trim();
-    const phone = document.getElementById('orderPhone').value.trim();
-
-    if (!orderingItem && !freeText) {
-      document.getElementById('orderText').focus();
-      haptic('error');
-      return;
-    }
-    if (!phone) {
-      document.getElementById('orderPhone').focus();
-      haptic('error');
-      return;
-    }
-
-    const payload = orderingItem
-      ? {
-          type: 'buyurtma_mahsulot',
-          group: currentGroup, group_name: GROUP_INFO[currentGroup].name,
-          category: currentCategory,
-          item_id: orderingItem.id, item_name: orderingItem.name, price: orderingItem.price,
-          phone: phone,
-          deadline: document.getElementById('orderDate').value.trim(),
-        }
-      : {
-          type: 'buyurtma_erkin',
-          group: currentGroup, group_name: GROUP_INFO[currentGroup].name,
-          category: currentCategory,
-          text: freeText,
-          phone: phone,
-          deadline: document.getElementById('orderDate').value.trim(),
-        };
-
-    sendOrder(payload);
-  });
-
-  function sendOrder(payload){
-    // Agar backend manzili berilgan bo'lsa — shu orqali yuboramiz (tavsiya etiladi)
-    if (BACKEND_ORDER_URL) {
-      fetch(BACKEND_ORDER_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+    try {
+      const res = await fetch(BACKEND_ORDER_URL, {
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...payload, init_data: tg ? tg.initData : null }),
-      }).then(() => onOrderSent()).catch(() => onOrderSent(true));
-      return;
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) { haptic('success'); onSubmitted(true); }
+      else { haptic('error'); onSubmitted(false, data.error); }
+    } catch (e) {
+      haptic('error'); onSubmitted(false, 'network');
     }
-    // Aks holda — eski usul: sendData (faqat Keyboard Button orqali ochilgan bo'lsa ishlaydi)
-    if (tg && tg.sendData) {
-      try {
-        tg.sendData(JSON.stringify(payload));
-        onOrderSent();
-      } catch (e) {
-        onOrderSent(true);
-      }
-    } else {
-      console.log('ORDER (standalone test):', payload);
-      onOrderSent();
-    }
+    setSending(false);
+  };
+
+  return (
+    <Sheet onClose={onClose}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--orange)", fontSize: 11.5, fontWeight: 700, marginBottom: 10 }}>
+        🛒 BUYURTMA BERISH
+      </div>
+      <div style={{ fontFamily: "var(--font-head)", fontSize: 17, fontWeight: 700, marginBottom: 4 }}>
+        {item ? item.name : "Boshqa material"}
+      </div>
+      {item && <div style={{ color: "var(--blue)", fontWeight: 800, fontSize: 14, marginBottom: 14 }}>{fmtPrice(item.price)}</div>}
+      {!item && (
+        <div style={{ marginBottom: 14 }}>
+          <label style={labelStyle()}>Nima kerak</label>
+          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Masalan: O'zbekiston xaritasi, A2 formatda, bosma" style={{ ...inputStyle(), minHeight: 80, resize: "vertical" }} />
+        </div>
+      )}
+      <label style={labelStyle()}>Telefon raqamingiz</label>
+      <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+998 90 123 45 67" inputMode="tel" style={inputStyle()} />
+      <label style={labelStyle()}>Qachongacha kerak (ixtiyoriy)</label>
+      <input value={deadline} onChange={(e) => setDeadline(e.target.value)} placeholder="Masalan: shu hafta ichida" style={inputStyle()} />
+      {errorMsg && <div style={{ color: "var(--pink)", fontSize: 12.5, fontWeight: 700, marginBottom: 10 }}>{errorMsg}</div>}
+      <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
+        <button onClick={onClose} style={{ flex: 1, background: "var(--card-muted)", border: "none", color: "var(--ink)", borderRadius: 12, padding: 13, fontWeight: 700, fontSize: 14 }}>Bekor qilish</button>
+        <button onClick={submit} disabled={sending} style={{ flex: 2, background: "var(--blue)", color: "#fff", border: "none", borderRadius: 12, padding: 13, fontWeight: 700, fontSize: 14, opacity: sending ? 0.7 : 1 }}>
+          {sending ? "Yuborilmoqda..." : "Yuborish"}
+        </button>
+      </div>
+    </Sheet>
+  );
+}
+
+function labelStyle(){ return { display: "block", fontSize: 11.5, fontWeight: 700, color: "var(--ink-soft)", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 6 }; }
+function inputStyle(){ return { width: "100%", padding: "12px 14px", borderRadius: 11, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--ink)", fontSize: 14, marginBottom: 14 }; }
+
+// ---------- Consult Modal ----------
+function ConsultModal({ onClose }) {
+  const [text, setText] = useState("");
+  const [sent, setSent] = useState(false);
+  return (
+    <Sheet onClose={onClose}>
+      {sent ? (
+        <div style={{ textAlign: "center", padding: "16px 0" }}>
+          <div style={{ width: 52, height: 52, borderRadius: 16, background: "var(--orange-soft)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 14px", fontSize: 22 }}>✅</div>
+          <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 16, marginBottom: 6 }}>Savolingiz qabul qilindi</div>
+          <div style={{ fontSize: 13, color: "var(--ink-soft)" }}>Metodist tez orada javob beradi. Bu xizmat har doim bepul.</div>
+        </div>
+      ) : (
+        <>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: "var(--orange-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>💬</div>
+            <div>
+              <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 16 }}>Bepul qisqa maslahat</div>
+              <div style={{ fontSize: 11.5, color: "var(--ink-soft)" }}>Har bir xodim uchun, bepul</div>
+            </div>
+          </div>
+          <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Savolingizni yozing..." style={{ ...inputStyle(), minHeight: 90, resize: "vertical" }} />
+          <button onClick={() => { if (text.trim()) { haptic('success'); setSent(true); } else haptic('error'); }} style={{ width: "100%", background: "var(--blue)", color: "#fff", border: "none", borderRadius: 12, padding: 13, fontWeight: 700, fontSize: 14 }}>Yuborish</button>
+        </>
+      )}
+    </Sheet>
+  );
+}
+
+// ---------- Support Modal ----------
+function SupportModal({ onClose }) {
+  const rows = [
+    { icon: "✈️", title: "Telegram", sub: "@bogcha_hujjatlari_support", color: "var(--blue)", soft: "var(--blue-soft)" },
+    { icon: "📞", title: "Telefon", sub: "88 808 16 02", color: "var(--orange)", soft: "var(--orange-soft)" },
+    { icon: "❓", title: "Tez-tez so'raladigan savollar", sub: "Tez orada", color: "var(--pink)", soft: "var(--pink-soft)" },
+  ];
+  return (
+    <Sheet onClose={onClose}>
+      <div style={{ textAlign: "center", marginBottom: 16 }}>
+        <div style={{ width: 54, height: 54, borderRadius: 16, background: "var(--blue-soft)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", fontSize: 22 }}>🆘</div>
+      </div>
+      <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 17, textAlign: "center", marginBottom: 4 }}>Yordam va aloqa</div>
+      <div style={{ fontSize: 12.5, color: "var(--ink-soft)", textAlign: "center", marginBottom: 18 }}>Har kuni 9:00 dan 18:00 gacha javob beramiz</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {rows.map((r, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "13px 15px" }}>
+            <div style={{ width: 38, height: 38, borderRadius: 11, background: r.soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 17, flexShrink: 0 }}>{r.icon}</div>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 13.5 }}>{r.title}</div>
+              <div style={{ fontSize: 12, color: "var(--ink-soft)" }}>{r.sub}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Sheet>
+  );
+}
+
+// ---------- Home Screen ----------
+function HomeScreen({ nav, themeMode, onToggleTheme, onConsult, onSupport }) {
+  return (
+    <div className="fade">
+      <TopBar themeMode={themeMode} onToggleTheme={onToggleTheme} />
+      <div style={{ padding: "8px 20px 4px", textAlign: "center" }}>
+        <img src={LOGO_SRC} alt="Bog'cha hujjatlari" style={{ width: 76, height: 76, borderRadius: 20, objectFit: "cover", boxShadow: "var(--shadow)", marginBottom: 14 }} />
+        <div style={{ fontFamily: "var(--font-head)", fontSize: 22, fontWeight: 700, marginBottom: 4 }}>O'z guruhingizni tanlang</div>
+        <div style={{ color: "var(--ink-soft)", fontSize: 14, lineHeight: 1.5 }}>Kanal, ko'rgazmalar va hujjatlar — barchasi bir joyda.</div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, padding: "18px 20px 0" }}>
+        {Object.entries(GROUP_INFO).map(([key, g]) => (
+          <button key={key} onClick={() => { haptic('light'); nav.push({ screen: "group", group: key }); }}
+            style={{ border: "none", borderRadius: 20, padding: "20px 16px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 20, minHeight: 110, background: g.soft, textAlign: "left", position: "relative" }}>
+            <span style={{ position: "absolute", top: 14, right: 14, width: 24, height: 24, borderRadius: "50%", background: "rgba(0,0,0,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: g.color }}>→</span>
+            <span style={{ fontSize: 24 }}>{g.emoji}</span>
+            <span style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 15, lineHeight: 1.25, color: "var(--ink)" }}>{g.name}</span>
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: "18px 20px 0", display: "flex", gap: 10 }}>
+        <button onClick={() => { haptic('light'); onConsult(); }} style={quickPillStyle()}>
+          <span style={{ fontSize: 17 }}>💬</span>
+          <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--ink-soft)" }}>Bepul maslahat</span>
+        </button>
+        <button onClick={() => { haptic('light'); onSupport(); }} style={quickPillStyle()}>
+          <span style={{ fontSize: 17 }}>🆘</span>
+          <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--ink-soft)" }}>Yordam</span>
+        </button>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "26px 20px 0", fontSize: 11, color: "var(--ink-faint)", fontWeight: 500 }}>
+        Bog'cha hujjatlari · Ichki portal
+      </div>
+    </div>
+  );
+}
+
+function quickPillStyle(){
+  return { flex: 1, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "12px 10px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, boxShadow: "var(--shadow)" };
+}
+
+// ---------- Group Screen ----------
+function GroupScreen({ group, nav, themeMode, onToggleTheme }) {
+  const info = GROUP_INFO[group];
+  return (
+    <div className="fade">
+      <TopBar onBack={() => nav.pop()} title={info.name} sub="Bo'limni tanlang" themeMode={themeMode} onToggleTheme={onToggleTheme} />
+      <div style={{ padding: "10px 20px 0" }}>
+        <a href={info.link} target="_blank" rel="noopener" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "var(--ink)", color: "var(--bg)", border: "none", padding: "14px 18px", borderRadius: 13, fontWeight: 700, fontSize: 14.5, marginBottom: 18 }}>
+          Kanalga o'tish →
+        </a>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {CATEGORIES.map((cat) => {
+            const count = CATALOG.filter((it) => it.groups.includes(group) && it.category === cat.id).length;
+            return (
+              <button key={cat.id} onClick={() => { haptic('light'); nav.push({ screen: "category", group, category: cat.id }); }}
+                style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 15, padding: "16px", display: "flex", alignItems: "center", gap: 14, textAlign: "left", boxShadow: "var(--shadow)" }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: info.soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{cat.icon}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 15.5, marginBottom: 2 }}>{cat.name}</div>
+                  <div style={{ fontSize: 12, color: "var(--ink-soft)", fontWeight: 600 }}>{count} ta material</div>
+                </div>
+                <span style={{ opacity: 0.4 }}>›</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div style={{ textAlign: "center", padding: "26px 20px 0", fontSize: 11, color: "var(--ink-faint)" }}>Bog'cha hujjatlari · Ichki portal</div>
+    </div>
+  );
+}
+
+// ---------- Category Screen ----------
+function CategoryScreen({ group, category, nav, themeMode, onToggleTheme, onOrder }) {
+  const [query, setQuery] = useState("");
+  const info = GROUP_INFO[group];
+  const cat = CATEGORIES.find((c) => c.id === category);
+  let items = CATALOG.filter((it) => it.groups.includes(group) && it.category === category);
+  if (query.trim()) {
+    const q = query.trim().toLowerCase();
+    items = items.filter((it) => it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q));
   }
 
-  function onOrderSent(failed){
-    orderModal.classList.remove('open');
-    orderingItem = null;
-    haptic(failed ? 'error' : 'success');
-    toast.textContent = failed ? 'Xatolik — qayta urinib ko\'ring' : 'Buyurtma yuborildi ✓';
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
-    // Eslatma: sendData() ishlatilganda Telegram odatda Mini App'ni avtomatik yopadi.
-    // Agar shu yopilish keraksiz bo'lsa — BACKEND_ORDER_URL orqali yuborish usuliga o'ting,
-    // shunda ilova ochiq qoladi va foydalanuvchi davom eta oladi.
-  }
-})();
+  return (
+    <div className="fade">
+      <TopBar onBack={() => nav.pop()} title={cat.name} sub={info.name} themeMode={themeMode} onToggleTheme={onToggleTheme} />
+      <div style={{ padding: "10px 20px 0" }}>
+        <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Qidirish..." style={{ ...inputStyle(), marginBottom: 6 }} />
+
+        {items.length === 0 && (
+          <div style={{ textAlign: "center", padding: "24px 16px", color: "var(--ink-soft)", fontSize: 13 }}>
+            Bu bo'limda hali material yo'q. Pastdagi tugma orqali buyurtma bering.
+          </div>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {items.map((it) => (
+            <div key={it.id} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 15, padding: 14, boxShadow: "var(--shadow)" }}>
+              <div style={{ display: "flex", gap: 12, marginBottom: 10 }}>
+                <div style={{ width: 60, height: 60, borderRadius: 11, background: info.soft, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, flexShrink: 0, overflow: "hidden" }}>
+                  {it.image ? <img src={it.image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.target.style.display = "none"; }} /> : "🖼️"}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: "var(--font-head)", fontWeight: 700, fontSize: 14.5, marginBottom: 3 }}>{it.name}</div>
+                  <div style={{ fontWeight: 800, fontSize: 13, color: "var(--blue)", marginBottom: 3 }}>{fmtPrice(it.price)}</div>
+                  <div style={{ fontSize: 12, color: "var(--ink-soft)", lineHeight: 1.4 }}>{it.desc}</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                {it.telegram_link
+                  ? <a href={it.telegram_link} target="_blank" rel="noopener" style={{ flex: 1, textAlign: "center", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 9, padding: "9px 10px", fontSize: 12, fontWeight: 700, color: "var(--ink)" }}>To'liq ko'rish →</a>
+                  : <span style={{ flex: 1, textAlign: "center", padding: "9px 10px", fontSize: 12, fontWeight: 700, color: "var(--ink-faint)" }}>Havola yo'q</span>}
+                <button onClick={() => { haptic('light'); onOrder({ group, category, item: it }); }} style={{ flex: 1, textAlign: "center", background: "var(--blue)", border: "none", borderRadius: 9, padding: "9px 10px", fontSize: 12, fontWeight: 800, color: "#fff" }}>🛒 Buyurtma qilish</button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button onClick={() => { haptic('light'); onOrder({ group, category, item: null }); }}
+          style={{ width: "100%", marginTop: 14, background: "var(--card)", border: "2px dashed var(--border)", color: "var(--ink)", padding: "14px 18px", borderRadius: 13, fontWeight: 700, fontSize: 14 }}>
+          🛒 Boshqa narsa kerak — buyurtma berish
+        </button>
+      </div>
+      <div style={{ textAlign: "center", padding: "26px 20px 0", fontSize: 11, color: "var(--ink-faint)" }}>Bog'cha hujjatlari · Ichki portal</div>
+    </div>
+  );
+}
+
+// ---------- App Root ----------
+function App() {
+  const [stack, setStack] = useState([{ screen: "home" }]);
+  const [themeMode, setThemeMode] = useState(tg && tg.colorScheme === "dark" ? "dark" : "light");
+  const [orderCtx, setOrderCtx] = useState(null);
+  const [consultOpen, setConsultOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
+  const [toast, setToast] = useState("");
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", themeMode === "dark");
+  }, [themeMode]);
+
+  const nav = {
+    push: (s) => setStack((st) => [...st, s]),
+    pop: () => setStack((st) => (st.length > 1 ? st.slice(0, -1) : st)),
+  };
+  const current = stack[stack.length - 1];
+  const toggleTheme = () => setThemeMode((m) => (m === "dark" ? "light" : "dark"));
+
+  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 2600); };
+
+  const handleOrderSubmitted = (ok, errorCode) => {
+    setOrderCtx(null);
+    showToast(ok ? "Buyurtma yuborildi ✓" : ("Xatolik yuz berdi (" + (errorCode || "noma'lum") + ") — qayta urinib ko'ring"));
+  };
+
+  return (
+    <div className="wrap">
+      {current.screen === "home" && (
+        <HomeScreen nav={nav} themeMode={themeMode} onToggleTheme={toggleTheme} onConsult={() => setConsultOpen(true)} onSupport={() => setSupportOpen(true)} />
+      )}
+      {current.screen === "group" && (
+        <GroupScreen group={current.group} nav={nav} themeMode={themeMode} onToggleTheme={toggleTheme} />
+      )}
+      {current.screen === "category" && (
+        <CategoryScreen group={current.group} category={current.category} nav={nav} themeMode={themeMode} onToggleTheme={toggleTheme} onOrder={setOrderCtx} />
+      )}
+
+      {orderCtx && <OrderModal context={orderCtx} onClose={() => setOrderCtx(null)} onSubmitted={handleOrderSubmitted} />}
+      {consultOpen && <ConsultModal onClose={() => setConsultOpen(false)} />}
+      {supportOpen && <SupportModal onClose={() => setSupportOpen(false)} />}
+      <Toast text={toast} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
-
 </body>
 </html>
